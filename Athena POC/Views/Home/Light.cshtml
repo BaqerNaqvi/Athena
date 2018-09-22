@@ -1,0 +1,597 @@
+﻿@{
+    ViewBag.Title = "LIGHTING";
+}
+<style>
+    .shortbox {
+        max-width: 200px !important;
+        width: 60px !important;
+    }
+
+    .lamp > select, .lamp > input {
+        min-width: 160px !important;
+    }
+
+    .burnHours > input {
+        max-width: 75px !important;
+    }
+
+    .shortNumber > input {
+        max-width: 55px !important;
+    }
+
+    .variable {
+        background-color: #ffa5007a;
+    }
+
+    .secondTwo {
+        background-color: #0000ff80;
+    }
+
+    .thirdGreen {
+        background-color: #00800087;
+    }
+
+    thead {
+        background-color: #22222212;
+    }
+
+    select {
+        width: 95%;
+        height: 27px;
+    }
+
+    .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+        padding: 4px 4px 4px 4px !important;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div>
+            <h5 style="text-align: center;">LIGHTING ASSESSMENT</h5>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Lamp Type</th>
+                    <th>Current Wattage</th>
+                    <th>Quantity</th>
+                    <th>Day Burn Hours (p/annum)</th>
+                    <th>Night Burn Hours (p/annum)</th>
+                    <th>Ballast Loss</th>
+
+                    <th>Total kWh</th>
+                    <th>Current Energy Cost</th>
+
+                    <th>Suggested Upgrade</th>
+                    <th>New Wattage</th>
+                    <th>New kWh</th>
+                    <th>kWh Saving</th>
+                    <th>Annual Cost Saving</th>
+                    <th>ROI (Years)</th>
+                    <th>Assessment Included?</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{for (var i = 0; i < 10; i++)
+                    {
+                        var id = i + 1;
+                        <tr>
+                            <td class="variable lamp">
+                                <select id="lampType_@id">
+                                    @{
+                                        List<string> lampTypes = new List<string>() { "Fluorescent T4 220mm", "Fluorescent T4 341mm", "Fluorescent T4 468mm", "Fluorescent T4 567mm", "Fluorescent T5 225mm", "Fluorescent T5 300mm", "Fluorescent T5 525mm", "Fluorescent T5 549mm", "Fluorescent T5 849mm", "Fluorescent T5 1149mm", "Fluorescent T5 1449mm", "Fluorescent T8 600mm", "Fluorescent T8 900mm", "Fluorescent T8 1200mm", "Fluorescent T8 1500mm", "Fluorescent T8 1800mm", "Fluorescent T12 1200mm", "Fluorescent T12 1500mm", "Halogen GU10", "Incandescent GLS Bayonet", "Incandescent Small Screw Light Candle", "Incandescent Micro Screw Light Candle", "Incandescent Small Screw Chandelier Candle", "Incandescent Micro Screw Chandelier Candle", "Incandescent Small Bayonet Opal Candle ", "Incandescent Bayonet Opal Candle", "Metal Halide G8.5", "Metal Halide G12", "Metal Halide RX7", "Metal Halide RX7-24", "Metal Halide GES E40 (Giant Screw)", "SON-E Standard Screw", "SON-E Giant Screw", "SON-T Standard Screw", "SON-T Giant Screw (GES E40)", "SOX Bayonet (BC B22d)", "DUAL SON/MERCURY Giant Screw Cap", "2D (2 pin)", "2D (4 pin)", "Double D (2 pin)", "Double D (4 pin)" };
+                                        <option value="0"> &nbsp;</option>
+                                        for (var j = 0; j < lampTypes.Count; j++)
+                                        {
+                                            <option value="@lampTypes[j]">@lampTypes[j]</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td class="variable">
+                                <select id="currWatt_@id">
+                                    @{
+                                        <option value="0"> &nbsp;</option>
+                                        for (var j = 1; j < 501; j++)
+                                        {
+                                            <option value="@j">@j</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td class="variable">
+                                <select id="quantity_@id">
+                                    @{
+                                        <option value="0"> &nbsp;</option>
+                                        for (var j = 1; j < 251; j++)
+                                        {
+                                            <option value="@j">@j</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td class="variable burnHours">
+                                <input id="dayBurn_@id" type="number" />
+                            </td>
+                            <td class="variable burnHours">
+                                <input id="nightBurn_@id" type="number" />
+                            </td>
+                            <td class="variable shortNumber">
+                                <input id="ballastLoss_@id" type="number" min="1" max="100" value="15" />
+                            </td>
+                            <td class="secondTwo">
+                                <input readonly id="totalKWH_@id" class="shortbox" type="text" />
+                            </td>
+                            <td class="secondTwo">
+                                <input readonly id="ecost_@id" class="shortbox" type="text" />
+                            </td>
+                            <td class="thirdGreen lamp">
+                                <input readonly id="upgrade_@id" class="shortbox" type="text" />
+                            </td>
+                            <td class="thirdGreen shortNumber">
+                                <input readonly id="newWatt_@id" class="shortbox" type="text" />
+                            </td>
+                            <td class="thirdGreen">
+                                <input readonly id="newKWH_@id" class="shortbox classCost_Saving" type="text" />
+                            </td>
+                            <td class="thirdGreen">
+                                <input readonly id="KWHSaving_@id" class="shortbox" type="text" />
+                            </td>
+                            <td class="thirdGreen">
+                                <input readonly id="costSaving_@id" class="shortbox" type="text" />
+                            </td>
+                            <td class="thirdGreen"><input readonly id="roi_@id" class="shortbox" type="text" /></td>
+                            <td class="variable">
+                                <select id="assInclu_@id">
+                                    <option value="No">No</option>
+                                    <option value="Yes"> Yes</option>
+                                </select>
+                            </td>
+                        </tr>
+                                        }
+                }
+            </tbody>
+        </table>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>CURRENT ENERGY USAGE (kWh)</th>
+                    <th>PROJECTED SAVINGS (kWh)</th>
+                    <th>NEW ENERGY USAGE (kWh)</th>
+                    <th>ESTIMATED TOTAL PROJECT COST</th>
+                    <th>ANNUAL COST SAVINGS</th>
+                    <th>RETURN ON INVESTMENT (YEARS)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input readonly id="currentEnrUsage" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="porjecSavings" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="newEnrUsage" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="estiTotlP_cost" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="anuralCostTotl" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="reutrnOnIvst" class="shortbox1" type="text" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<Script>
+
+  var suggestedUpgrade = [
+   {
+	 "existing": "Fluorescent T4 220mm",
+	 "suggestedUpgrade": "Fluorescent T4 220mm",
+	 "bestWattage": 6,
+	 "cost": "2.84"
+   },
+   {
+	 "existing": "Fluorescent T4 341mm",
+	 "suggestedUpgrade": "Fluorescent T4 341mm",
+	 "bestWattage": 10,
+	 "cost": "3.32"
+   },
+   {
+	 "existing": "Fluorescent T4 468mm",
+	 "suggestedUpgrade": "Fluorescent T4 468mm",
+	 "bestWattage": 16,
+	 "cost": "3.79"
+   },
+   {
+	 "existing": "Fluorescent T4 567mm",
+	 "suggestedUpgrade": "Fluorescent T4 567mm",
+	 "bestWattage": 20,
+	 "cost": "4.27"
+   },
+   {
+	 "existing": "Fluorescent T5 225mm",
+	 "suggestedUpgrade": "Fluorescent T5 225mm",
+	 "bestWattage": 6,
+	 "cost": "1.42"
+   },
+   {
+	 "existing": "Fluorescent T5 300mm",
+	 "suggestedUpgrade": "Fluorescent T5 300mm",
+	 "bestWattage": 8,
+	 "cost": "1.51"
+   },
+   {
+	 "existing": "Fluorescent T5 525mm",
+	 "suggestedUpgrade": "Fluorescent T5 525mm",
+	 "bestWattage": 13,
+	 "cost": "2.37"
+   },
+   {
+	 "existing": "Fluorescent T5 549mm",
+	 "suggestedUpgrade": "Fluorescent T5 549mm",
+	 "bestWattage": 14,
+	 "cost": "2.37"
+   },
+   {
+	 "existing": "Fluorescent T5 849mm",
+	 "suggestedUpgrade": "Fluorescent T5 849mm",
+	 "bestWattage": 21,
+	 "cost": "2.56"
+   },
+   {
+	 "existing": "Fluorescent T5 1149mm",
+	 "suggestedUpgrade": "Fluorescent T5 1149mm",
+	 "bestWattage": 28,
+	 "cost": "2.65"
+   },
+   {
+	 "existing": "Fluorescent T5 1449mm",
+	 "suggestedUpgrade": "Fluorescent T5 1449mm",
+	 "bestWattage": 35,
+	 "cost": "2.84"
+   },
+   {
+	 "existing": "Fluorescent T8 600mm",
+	 "suggestedUpgrade": "Fluorescent T8 600mm",
+	 "bestWattage": 18,
+	 "cost": "1.89"
+   },
+   {
+	 "existing": "Fluorescent T8 900mm",
+	 "suggestedUpgrade": "Fluorescent T8 900mm",
+	 "bestWattage": 30,
+	 "cost": "3.98"
+   },
+   {
+	 "existing": "Fluorescent T8 1200mm",
+	 "suggestedUpgrade": "Fluorescent T8 1200mm",
+	 "bestWattage": 36,
+	 "cost": "2.18"
+   },
+   {
+	 "existing": "Fluorescent T8 1500mm",
+	 "suggestedUpgrade": "Fluorescent T8 1500mm",
+	 "bestWattage": 58,
+	 "cost": "2.37"
+   },
+   {
+	 "existing": "Fluorescent T8 1800mm",
+	 "suggestedUpgrade": "Fluorescent T8 1800mm",
+	 "bestWattage": 70,
+	 "cost": "3.79"
+   },
+   {
+	 "existing": "Fluorescent T12 1200mm",
+	 "suggestedUpgrade": "Fluorescent T12 1200mm",
+	 "bestWattage": 40,
+	 "cost": "5.99"
+   },
+   {
+	 "existing": "Fluorescent T12 1500mm",
+	 "suggestedUpgrade": "Fluorescent T12 1500mm",
+	 "bestWattage": 65,
+	 "cost": "11.49"
+   },
+   {
+	 "existing": "Halogen GU10",
+	 "suggestedUpgrade": "LED Spot GU10",
+	 "bestWattage": 5,
+	 "cost": "1.89"
+   },
+   {
+	 "existing": "Incandescent GLS Bayonet",
+	 "suggestedUpgrade": "Incandescent GLS Bayonet",
+	 "bestWattage": 11,
+	 "cost": "3.03"
+   },
+   {
+	 "existing": "Incandescent Small Screw Light Candle",
+	 "suggestedUpgrade": "Incandescent Small Screw Light Candle",
+	 "bestWattage": 7,
+	 "cost": "1.23"
+   },
+   {
+	 "existing": "Incandescent Micro Screw Light Candle",
+	 "suggestedUpgrade": "Incandescent Micro Screw Light Candle",
+	 "bestWattage": 7,
+	 "cost": "1.23"
+   },
+   {
+	 "existing": "Incandescent Small Screw Chandelier Candle",
+	 "suggestedUpgrade": "Incandescent Small Screw Chandelier Candle",
+	 "bestWattage": 15,
+	 "cost": "4.27"
+   },
+   {
+	 "existing": "Incandescent Micro Screw Chandelier Candle",
+	 "suggestedUpgrade": "Incandescent Micro Screw Chandelier Candle",
+	 "bestWattage": 15,
+	 "cost": "4.27"
+   },
+   {
+	 "existing": "Incandescent Small Bayonet Opal Candle ",
+	 "suggestedUpgrade": "Incandescent Small Bayonet Opal Candle ",
+	 "bestWattage": 7,
+	 "cost": "2.75"
+   },
+   {
+	 "existing": "Incandescent Bayonet Opal Candle",
+	 "suggestedUpgrade": "Incandescent Bayonet Opal Candle",
+	 "bestWattage": 7,
+	 "cost": "2.75"
+   },
+   {
+	 "existing": "Metal Halide G8.5",
+	 "suggestedUpgrade": "Metal Halide G8.5",
+	 "bestWattage": 20,
+	 "cost": "10.99"
+   },
+   {
+	 "existing": "Metal Halide G12",
+	 "suggestedUpgrade": "Metal Halide G12",
+	 "bestWattage": 35,
+	 "cost": "10.99"
+   },
+   {
+	 "existing": "Metal Halide RX7",
+	 "suggestedUpgrade": "Metal Halide RX7",
+	 "bestWattage": 70,
+	 "cost": "8.99"
+   },
+   {
+	 "existing": "Metal Halide RX7-24",
+	 "suggestedUpgrade": "Metal Halide RX7-24",
+	 "bestWattage": 150,
+	 "cost": "8.99"
+   },
+   {
+	 "existing": "Metal Halide GES E40 (Giant Screw)",
+	 "suggestedUpgrade": "Metal Halide GES E40 (Giant Screw)",
+	 "bestWattage": 250,
+	 "cost": "24.49"
+   },
+   {
+	 "existing": "SON-E Standard Screw",
+	 "suggestedUpgrade": "SON-E Standard Screw",
+	 "bestWattage": 50,
+	 "cost": "10.49"
+   },
+   {
+	 "existing": "SON-E Giant Screw",
+	 "suggestedUpgrade": "SON-E Giant Screw",
+	 "bestWattage": 150,
+	 "cost": "18.99"
+   },
+   {
+	 "existing": "SON-T Standard Screw",
+	 "suggestedUpgrade": "SON-T Standard Screw",
+	 "bestWattage": 70,
+	 "cost": "4.99"
+   },
+   {
+	 "existing": "SON-T Giant Screw (GES E40)",
+	 "suggestedUpgrade": "SON-T Giant Screw (GES E40)",
+	 "bestWattage": 150,
+	 "cost": "7.59"
+   },
+   {
+	 "existing": "SOX Bayonet (BC B22d)",
+	 "suggestedUpgrade": "SOX Bayonet (BC B22d)",
+	 "bestWattage": 18,
+	 "cost": "31.49"
+   },
+   {
+	 "existing": "DUAL SON/MERCURY Giant Screw Cap",
+	 "suggestedUpgrade": "DUAL SON/MERCURY Giant Screw Cap",
+	 "bestWattage": 250,
+	 "cost": "24.99"
+   },
+   {
+	 "existing": "2D (2 pin)",
+	 "suggestedUpgrade": "2D (2 pin)",
+	 "bestWattage": 14,
+	 "cost": "4.27"
+   },
+   {
+	 "existing": "2D (4 pin)",
+	 "suggestedUpgrade": "2D (4 pin)",
+	 "bestWattage": 14,
+	 "cost": "4.27"
+   },
+   {
+	 "existing": "Double D (2 pin)",
+	 "suggestedUpgrade": "Double D (2 pin)",
+	 "bestWattage": 16,
+	 "cost": "2.84"
+   },
+   {
+	 "existing": "Double D (4 pin)",
+	 "suggestedUpgrade": "Double D (4 pin)",
+	 "bestWattage": 16,
+	 "cost": "2.84"
+   }
+  ];
+  $('[id^="lampType_"]').change(function () {
+	var upgrade = getSuggestedUpgrade($(this).val());
+	var id = $(this).attr('id').split('_')[1];
+	if (upgrade != null && upgrade != undefined)
+	{
+	  $('#upgrade_' + id).val(upgrade.suggestedUpgrade).text(upgrade.suggestedUpgrade);
+	  $('#upgrade_' + id).data("cost",upgrade.cost);
+	  $('#newWatt_' + id).val(upgrade.bestWattage).text(upgrade.bestWattage);
+	}
+	else
+	{
+	  $('#upgrade_' + id).val("").text("");
+	  $('#upgrade_' + id).data("cost", "");
+	  $('#newWatt_' + id).val("").text("");
+	}
+
+	getNewKWH(id);
+	getAnnualCostSaving(id);
+	getROI(id);
+	getEstimatedTotalProjectCost();
+  });
+  $('[id^="currWatt_"]').change(function () {
+	var id = $(this).attr('id').split('_')[1];
+	getTotalKWH(id);
+	getEnergyCost(id);
+  });
+  $('[id^="quantity_"]').change(function () {
+	var id = $(this).attr('id').split('_')[1];
+	getTotalKWH(id);
+	getEnergyCost(id);
+	getNewKWH(id);
+	getAnnualCostSaving(id);
+	getROI(id);
+	getEstimatedTotalProjectCost();
+  });
+  $('[id^="dayBurn_"]').change(function () {
+	var id = $(this).attr('id').split('_')[1];
+	getTotalKWH(id);
+	getEnergyCost(id);
+	getNewKWH(id);
+	getAnnualCostSaving(id);
+
+  });
+  $('[id^="nightBurn_"]').change(function () {
+	var id = $(this).attr('id').split('_')[1];
+	getTotalKWH(id);
+	getEnergyCost(id);
+	getNewKWH(id);
+	getAnnualCostSaving(id);
+
+  });
+  $('[id^="ballastLoss_"]').change(function () {
+	var id = $(this).attr('id').split('_')[1];
+	getTotalKWH(id);
+
+  });
+  $('[id^="assInclu_"]').change(function () {
+	getProjectedSaving();
+	getEstimatedTotalProjectCost();
+	getAnnualCostSavings();
+  });
+  function getSuggestedUpgrade(existing)
+  {
+	var found = suggestedUpgrade.find(function (element) {
+	  return element.existing == existing;
+	});
+	return found;
+  }
+
+  function getTotalKWH(id) {
+	var x = (parseInt($('#currWatt_' + id).val()) + (parseInt($('#currWatt_' + id).val()) * (parseInt($('#ballastLoss_' + id).val()) / 100))) * (parseInt($('#quantity_' + id).val()) / 1000);
+	var y = (x * parseInt($('#dayBurn_' + id).val())) + (x * parseInt($('#nightBurn_' + id).val()));
+	if (!isNaN(y)) {
+	  $('#totalKWH_' + id).val(Math.ceil(y)).text(Math.ceil(y));
+	  getKWHSaving(id);
+	  getCurrentEnergyUsage();
+	}
+  }
+  function getEnergyCost(id) {
+	var x = parseInt($('#currWatt_' + id).val()) * parseInt($('#quantity_' + id).val()) / 1000;
+	var y = (x * parseInt($('#dayBurn_' + id).val()) * 10.12 / 100) + (x * parseInt($('#nightBurn_' + id).val()) * 7.00 / 100);
+	if (!isNaN(y)) {
+	  $('#ecost_' + id).val('£' + y.toFixed(2)).text('£' + y.toFixed(2));
+	}
+  }
+  function getNewKWH(id) {
+	var x = parseInt($('#newWatt_' + id).val()) * parseInt($('#quantity_' + id).val()) / 1000;
+	var y = (x * parseInt($('#dayBurn_' + id).val())) + (x * parseInt($('#nightBurn_' + id).val()));
+	if (!isNaN(y)) {
+	  $('#newKWH_' + id).val(Math.ceil(y)).text(Math.ceil(y));
+	  getKWHSaving(id);
+	}
+  }
+  function getKWHSaving(id) {
+	var x = parseInt($('#totalKWH_' + id).val()) - parseInt($('#newKWH_' + id).val())
+	if (!isNaN(x)) {
+	  $('#KWHSaving_' + id).val(Math.ceil(x)).text(Math.ceil(x));
+	  getProjectedSaving();
+	}
+  }
+  function getAnnualCostSaving(id) {
+	var x = parseInt($('#newWatt_' + id).val()) * parseInt($('#quantity_' + id).val()) / 1000;
+	var y = (x * parseInt($('#dayBurn_' + id).val()) * 10.12 / 100) + (x * parseInt($('#nightBurn_' + id).val()) * 7.00 / 100);
+	var z = parseFloat($("#ecost_" + id).val().replace(/\£/g, '')) - y.toFixed(2);
+	if (!isNaN(z)) {
+	  $('#costSaving_' + id).val('£' + z.toFixed(2)).text('£' + z.toFixed(2));
+	  getROI(id);
+	  getAnnualCostSavings();
+	}
+  }
+  function getROI(id) {
+	var x = parseFloat($('#upgrade_' + id).data("cost")) * parseInt($('#quantity_' + id).val()) / parseFloat($('#costSaving_' + id).val().replace(/\£/g, ''));
+	if (!isNaN(x)) {
+	  $('#roi_' + id).val(x.toFixed(2)).text(x.toFixed(2));
+	}
+  }
+  function getCurrentEnergyUsage() {
+	var currentEnergyUsage = 0;
+	$('[id^="totalKWH_"]').each(function () {
+	  if (!isNaN(parseInt($(this).val())))
+		currentEnergyUsage += parseInt($(this).val()); //<==== a catch  in here !! read below
+	});
+	$('#currentEnrUsage').val(currentEnergyUsage);
+	getNewEnergyUsage();
+  }
+  function getProjectedSaving() {
+	var projectedSaving = 0;
+	$('[id^="KWHSaving_"]').each(function () {
+	  var id = $(this).attr('id').split('_')[1];
+	  if (!isNaN(parseInt($(this).val())) && $('#assInclu_' + id).val() == 'Yes')
+		projectedSaving += parseInt($(this).val()); //<==== a catch  in here !! read below
+	});
+	$('#porjecSavings').val(projectedSaving);
+	getNewEnergyUsage();
+  }
+  function getNewEnergyUsage() {
+	var newEnegyUsage = parseInt($('#currentEnrUsage').val()) - parseInt($('#porjecSavings').val());
+	if (!isNaN(newEnegyUsage))
+	  $('#newEnrUsage').val(newEnegyUsage);
+  }
+  function getEstimatedTotalProjectCost() {
+	var estimatedTotalProjectCost = 0;
+	$('[id^="assInclu_"]').each(function () {
+	  var id = $(this).attr('id').split('_')[1];
+	  if ($(this).val() == 'Yes' && !isNaN(parseFloat($('#upgrade_' + id).data("cost")) * parseInt($('#quantity_' + id).val()))) {
+		estimatedTotalProjectCost += parseFloat($('#upgrade_' + id).data("cost")) * parseInt($('#quantity_' + id).val());
+	  }
+	});
+	$('#estiTotlP_cost').val('£' + estimatedTotalProjectCost.toFixed(2));
+	getReturnOnInvestment();
+  }
+  function getAnnualCostSavings() {
+	var annualCostSavings = 0;
+	$('[id^="assInclu_"]').each(function () {
+	  var id = $(this).attr('id').split('_')[1];
+	  if ($(this).val() == 'Yes' && !isNaN(parseFloat($('#costSaving_' + id).val().replace(/\£/g, '')))) {
+		annualCostSavings += parseFloat($('#costSaving_' + id).val().replace(/\£/g, ''));
+	  }
+	});
+	$('#anuralCostTotl').val('£' + annualCostSavings.toFixed(2));
+	getReturnOnInvestment();
+  }
+  function getReturnOnInvestment() {
+	var newEnegyUsage = parseFloat($('#estiTotlP_cost').val().replace(/\£/g, '')) / parseFloat($('#anuralCostTotl').val().replace(/\£/g, ''));
+	if (!isNaN(newEnegyUsage))
+	  $('#reutrnOnIvst').val(newEnegyUsage.toFixed(2));
+  }
+</Script>

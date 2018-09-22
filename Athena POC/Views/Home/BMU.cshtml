@@ -1,0 +1,272 @@
+﻿@{
+    ViewBag.Title = "BMU";
+}
+<style>
+    .shortbox {
+        max-width: 200px !important;
+        width: 75px !important;
+    }
+
+    .firstFive {
+        background-color: #ffa5007a;
+    }
+
+    .secondTwo {
+        background-color: #0000ff80;
+    }
+
+    .thirdGreen {
+        background-color: #00800087;
+    }
+
+    thead {
+        background-color: #22222212;
+    }
+
+    select {
+        width: 95%;
+        height: 27px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <div>
+            <h5 style="text-align: center;">BURNER MODULATION ASSESSMENT</h5>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Boiler Name</th>
+                    <th>Capacity (kWth)</th>
+                    <th>Boiler Age(Y)</th>
+                    <th>Efficiency(%)</th>
+                    <th>Annual Gas Input (kWg)</th>
+
+                    <th>Annual Heat Output (kWth)</th>
+                    <th>Current Energy Cost</th>
+
+                    <th>Projected Gas Saving %</th>
+                    <th>Projected Gas Saving (kW)</th>
+                    <th>Annual Cost Saving</th>
+                    <th>Cost £</th>
+                    <th>ROI (Years)</th>
+
+                    <th>Assessment Included?</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    for (var i = 0; i < 10; i++)
+                    {
+                        var id = i + 1;
+                        <tr>
+                            <td class="firstFive"><input id="bname_@id" type="text" /></td>
+                            <td class="firstFive">
+                                <select id="cap_@id">
+                                    @{
+                                        <option value="1"> &nbsp;</option>
+                                        for (var j = 40; j < 1200; j++)
+                                        {
+                                            <option value="@j">@j</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td class="firstFive">
+                                <select onchange="ageChanged(this)" id="age_@id">
+                                    @{
+                                        <option value="1"> &nbsp;</option>
+                                        for (var j = 10; j < 50; j++)
+                                        {
+                                            <option value="@j">@j</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td class="firstFive">
+                                <select id="eff_@id" onchange="calAnualHeatOutput(this)">
+                                    @{
+                                        <option value="1"> &nbsp;</option>
+                                        for (var j = 40; j < 100; j++)
+                                        {
+                                            <option value="@j">@j</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td class="firstFive"><input id="ginput_@id" class="shortbox calAnualHeatOutput" type="text" /></td>
+
+                            <td class="secondTwo"><input readonly id="houtput_@id" class="shortbox" type="text" /></td>
+                            <td class="secondTwo"><input readonly id="ecost_@id" class="shortbox" type="text" /></td>
+
+                            <td class="thirdGreen"><input readonly id="gsaving_@id" class="shortbox" type="text" /></td>
+                            <td class="thirdGreen"><input readonly id="gsavingKW_@id" class="shortbox" type="text" /></td>
+                            <td class="thirdGreen"><input readonly id="aCostSaving_@id" class="shortbox classCost_Saving" type="text" /></td>
+                            <td class="thirdGreen"><input readonly id="cost_@id" class="shortbox" type="text" /></td>
+                            <td class="thirdGreen"><input readonly id="roi_@id" class="shortbox" type="text" /></td>
+
+                            <td class="firstFive"><select onchange="assIncludedChange(this)" id="assInclu_@id"><option value="No">No</option><option value="Yes"> Yes</option></select></td>
+                        </tr>
+                                        }
+                }
+            </tbody>
+        </table>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>CURRENT ENERGY USAGE (kWh)</th>
+                    <th>PROJECTED SAVINGS (kWh)</th>
+                    <th>NEW ENERGY USAGE (kWh)</th>
+                    <th>ESTIMATED TOTAL PROJECT COST</th>
+                    <th>ANNUAL COST SAVINGS</th>
+
+                    <th>RETURN ON INVESTMENT (YEARS)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input readonly id="currentEnrUsage" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="porjecSavings" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="newEnrUsage" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="estiTotlP_cost" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="anuralCostTotl" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="reutrnOnIvst" class="shortbox1" type="text" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<Script>
+    $('.calAnualHeatOutput').blur(function () {
+        calAnualHeatOutput(this);
+        calcCurrentEnergyCost(this);
+    });
+    function calAnualHeatOutput(ref) {
+        var id = $(ref).attr('id').split('_')[1];
+        var eff = $('#eff_' + id).val();
+        var ginput = $('#ginput_' + id).val();
+        var val = (eff / 100) * ginput;
+        $('#houtput_' + id).val(val);
+
+        //Projected Gas Saving (kW)
+        var sav = $('#gsaving_' + id).val();
+        var val = $("#ginput_" + id).val() * (sav/100);
+        $('#gsavingKW_' + id).val( Math.ceil(val));
+
+        //Annual Cost Saving
+        sav = $('#gsavingKW_' + id).val(); //n5
+        var val = (sav *2.10)/100;
+        $('#aCostSaving_' + id).val(Math.ceil(val));
+        sumAnualCostSaving();
+
+
+        //cost
+        $('#cost_' + id).val("1995");
+
+
+
+        //////////////////////////////////////
+        //CURRENT ENERGY USAGE (kWh)
+        var total = 0;
+        var allEle = $('.calAnualHeatOutput');
+        for (var i = 0; i < allEle.length; i++) {
+            var currentEle = allEle[i];
+            var eval = $(currentEle).val();
+            if (eval.trim() != "") {
+                total = total + parseInt(eval.trim());
+            }
+        }
+        $('#currentEnrUsage').val(total);
+        setNewEngry();
+    }
+
+    function calcCurrentEnergyCost(ref) {
+        var id = $(ref).attr('id').split('_')[1];
+        var anualGInput = $('#ginput_' + id).val();
+        var val = (2.10 / 100) * anualGInput;
+        $('#ecost_' + id).val("£" + Math.round(val * 100) / 100);
+    }
+
+    function ageChanged(ref) {
+        var id = $(ref).attr('id').split('_')[1];
+        var age = $('#age_' + id).val();
+        var mapped = getMappedVal(age);
+        $('#gsaving_' + id).val(mapped.map);
+
+    }
+
+    //PROJECTED SAVINGS (kWh)
+    var PROJECTED_SAVINGS_TOTAL = 0;
+
+    var ESTIMATED_TOTAL_PROJECT_COST = 0;
+
+    function assIncludedChange(ref) {
+        var id = $(ref).attr('id').split('_')[1];
+        var val = $(ref).val();
+        if (val == "Yes") {
+            PROJECTED_SAVINGS_TOTAL = PROJECTED_SAVINGS_TOTAL + parseInt($('#gsavingKW_' + id).val());
+            ESTIMATED_TOTAL_PROJECT_COST = ESTIMATED_TOTAL_PROJECT_COST + parseInt($('#cost_' + id).val());
+        } else {
+            PROJECTED_SAVINGS_TOTAL = PROJECTED_SAVINGS_TOTAL - parseInt($('#gsavingKW_' + id).val());
+            ESTIMATED_TOTAL_PROJECT_COST = ESTIMATED_TOTAL_PROJECT_COST - parseInt($('#cost_' + id).val());
+        }
+        $('#porjecSavings').val(PROJECTED_SAVINGS_TOTAL);
+        $('#estiTotlP_cost').val(ESTIMATED_TOTAL_PROJECT_COST);
+        setNewEngry();
+        calcReturnOnInvest();
+    }
+
+    function setNewEngry() {
+        //NEW ENERGY USAGE (kWh)
+        var val1 = $('#currentEnrUsage').val();
+        var val2 = $('#porjecSavings').val();
+        var res = val1;
+        if (val2 != "") {
+            res = parseInt(val1) - parseInt(val2);
+        }
+
+        $("#newEnrUsage").val(res);
+    }
+
+    function sumAnualCostSaving(){
+        var total = 0;
+        var allEle = $('.classCost_Saving');
+        for (var i = 0; i < allEle.length; i++) {
+            var currentEle = allEle[i];
+            var eval = $(currentEle).val();
+            if (eval.trim() != "") {
+                total = total + parseInt(eval.trim());
+            }
+        }
+        $('#anuralCostTotl').val(total);
+        calcReturnOnInvest();
+    }
+
+    function calcReturnOnInvest() {
+        //NEW ENERGY USAGE (kWh)
+        var val1 = $('#estiTotlP_cost').val();
+        var val2 = $('#anuralCostTotl').val();
+        var res = val1;
+        if (val2 != "" && val2 != "0" && val1 != "" && val1 != "0") {
+            res = parseInt(val1) / parseInt(val2);
+        }
+        $("#reutrnOnIvst").val(res);
+    }
+</Script>
+<script>
+    function getMappedVal(age) {
+        var found = mapArry.find(function (element) {
+            return element.value==age;
+        });
+        return found;
+    }
+    var mapArry = [{ value: 0, map: 0 }, { value: 1, map: 8 }, { value: 2, map: 8 }, { value: 3, map: 8 },
+    { value: 4, map: 10 }, { value: 5, map: 10 }, { value: 6, map: 10 }, { value: 7, map: 10 }, { value: 8, map: 10 }, { value: 9, map: 10 }, { value: 10, map: 10 },
+    { value: 11, map: 12 }, { value: 12, map: 12 }, { value: 13, map: 12 }, { value: 14, map: 12 },
+    { value: 15, map: 15 }, { value: 16, map: 15 }, { value: 17, map: 15 }, { value: 18, map: 15 }, { value: 19, map: 15 }, { value: 20, map: 15 },
+     { value: 21, map: 17 }, { value: 22, map: 17 }, { value: 23, map: 17 }, { value: 24, map: 17 }, { value: 25, map: 17 }, { value: 26, map: 17 }, { value: 27, map: 17 }, { value: 28, map: 17 }, { value: 29, map: 17 }, { value: 30, map: 17 }, { value: 31, map: 17 }, { value: 32, map: 17 }, { value: 33, map: 17 }, { value: 34, map: 17 }, { value: 35, map: 17 },
+    { value: 36, map: 20 }, { value: 37, map: 20 }, { value: 38, map: 20 }, { value: 39, map: 20 }, { value: 40, map: 20 }, { value: 41, map: 20 }, { value: 42, map: 20 }, { value: 43, map: 20 }, { value: 44, map: 20 }, { value: 45, map: 20 }, { value: 46, map: 20 }, { value: 47, map: 20 }, { value: 48, map: 20 }, { value: 49, map: 20 }, { value: 50, map: 20 }];
+</script>
