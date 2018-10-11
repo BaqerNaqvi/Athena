@@ -27,5 +27,10 @@ namespace Athena_POC.Controllers
         {
             return View();
         }
+
+        public ActionResult Power()
+        {
+            return View();
+        }
     }
 }

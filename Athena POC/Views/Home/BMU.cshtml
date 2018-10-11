@@ -32,6 +32,7 @@
 <div class="row">
     <div class="col-md-12">
         <div>
+            <h5><a href="~/Home/Index">Home</a></h5>
             <h5 style="text-align: center;">BURNER MODULATION ASSESSMENT</h5>
         </div>
         <table class="table table-bordered">
@@ -166,6 +167,15 @@
         //cost
         $('#cost_' + id).val("1995");
 
+        //ROI
+        var aSaving = $('#aCostSaving_' + id).val();
+        var cost = $("#cost_" + id).val();
+        var rest = 0;
+
+        if (aSaving != "" && aSaving!=="0") {
+             rest = parseFloat(cost) / parseFloat(aSaving);
+        }
+        $('#roi_' + id).val(rest);
 
 
         //////////////////////////////////////

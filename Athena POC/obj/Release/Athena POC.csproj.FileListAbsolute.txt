@@ -73,3 +73,78 @@ C:\Users\baqer.naqvi.AFINITI\documents\visual studio 2015\Projects\Athena POC\At
 C:\Users\baqer.naqvi.AFINITI\documents\visual studio 2015\Projects\Athena POC\Athena POC\obj\Release\Athena POC.csprojResolveAssemblyReference.cache
 C:\Users\baqer.naqvi.AFINITI\documents\visual studio 2015\Projects\Athena POC\Athena POC\obj\Release\Athena POC.dll
 C:\Users\baqer.naqvi.AFINITI\documents\visual studio 2015\Projects\Athena POC\Athena POC\obj\Release\Athena POC.pdb
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\roslyn\csc.exe
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\roslyn\System.Collections.Immutable.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\roslyn\System.Reflection.Metadata.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\roslyn\vbc.exe
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\roslyn\VBCSCompiler.exe
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\roslyn\VBCSCompiler.exe.config
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Athena POC.dll.config
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Athena POC.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Athena POC.pdb
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Antlr3.Runtime.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\EntityFramework.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\EntityFramework.SqlServer.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.AspNet.Identity.Core.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Security.Cookies.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Security.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Security.Facebook.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Security.Google.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Security.OAuth.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Security.Twitter.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Web.Infrastructure.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Newtonsoft.Json.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Owin.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Net.Http.Formatting.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.Helpers.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.Http.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.Http.WebHost.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.Mvc.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.Optimization.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.Razor.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.WebPages.Deployment.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.WebPages.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.WebPages.Razor.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\WebGrease.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.Helpers.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.Mvc.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.Optimization.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.Razor.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.WebPages.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.WebPages.Deployment.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.WebPages.Razor.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Antlr3.Runtime.pdb
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Newtonsoft.Json.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Net.Http.Formatting.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.Http.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\System.Web.Http.WebHost.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\EntityFramework.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\EntityFramework.SqlServer.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.AspNet.Identity.Core.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Security.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Security.Facebook.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Security.Cookies.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Security.OAuth.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Security.Google.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Security.Twitter.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\Work\Projects\Athena POC\Athena\Athena POC\obj\Release\Athena POC.csprojResolveAssemblyReference.cache
+D:\Work\Projects\Athena POC\Athena\Athena POC\obj\Release\Athena POC.dll
+D:\Work\Projects\Athena POC\Athena\Athena POC\obj\Release\Athena POC.pdb

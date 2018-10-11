@@ -1,0 +1,318 @@
+﻿@{
+    ViewBag.Title = "LTHW";
+}
+<style>
+    .shortbox {
+        max-width: 200px !important;
+        width: 75px !important;
+    }
+
+    .firstFive {
+        background-color: #ffa5007a;
+    }
+
+   
+
+    thead {
+        background-color: #22222212;
+    }
+
+    select {
+        width: 95%;
+        height: 27px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <div>
+            <h5><a href="~/Home/Index">Home</a></h5>
+
+            <h5 style="text-align: center;">LTHW PIPEWORK INSULATION ASSESSMENT</h5>
+            <label>Operating Hours (per annum)</label> <input placeholder="input hours here" id="opHours" class="firstFive" type="text"/>
+            <label style="margin-left: 12px;">Gas p/kWe</label> <input id="gasPkWe" placeholder="Input gas here" class="firstFive" type="text" />
+        </div>
+        <table class="table table-bordered" style="margin-top: 12px;">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Pipework Nominal Bore</th>
+                    <th>Heat Emission</th>
+                    @*<th>Equivalent length of pipe</th>*@
+                    <th>Heat Loss before</th>
+
+                    <th>Heat Loss after</th>
+                    <th>Difference</th>
+                    <th>Saving per Fitting £</th>
+
+                    <th>No. of fittings</th>
+                    <th>Total Saving</th>
+                    <th>kWh/yr</th>
+                    <th>Total Cost</th>
+
+                    <th>Assessment?</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    for (var i = 0; i < 10; i++)
+                    {
+                        var id = i + 1;
+                        <tr>
+                            <td>
+                                <select id="type_@id" onchange="typeChanged(this)" class="firstFive">
+                                    <option value="0">&nbsp;</option>
+                                    <option value="20mm Flange Mat">20mm Flange Mat</option>
+                                    <option value="27mm Flange Mat">27mm Flange Mat</option>
+                                    <option value="34mm Flange Mat">34mm Flange Mat</option>
+                                    <option value="42mm Flange Mat">42mm Flange Mat</option>
+                                    <option value="48mm Flange Mat">48mm Flange Mat</option>
+                                    <option value="60mm Flange Mat">60mm Flange Mat</option>
+                                    <option value="76mm Flange Mat">76mm Flange Mat</option>
+                                    <option value="88mm Flange Mat">88mm Flange Mat</option>
+                                    <option value="114mm Flange Mat">114mm Flange Mat</option>
+                                    <option value="139mm Flange Mat">139mm Flange Mat</option>
+                                    <option value="168mm Flange Mat">168mm Flange Mat</option>
+                                    <option value="219mm Flange Mat">219mm Flange Mat</option>
+                                    
+                                    <option value="20mm Valve Mat">20mm Valve Mat</option>
+                                    <option value="27mm Valve Mat">27mm Valve Mat</option>
+                                    <option value="34mm Valve Mat">34mm Valve Mat</option>
+                                    <option value="42mm Valve Mat">42mm Valve Mat</option>
+                                    <option value="48mm Valve Mat">48mm Valve Mat</option>
+                                    <option value="60mm Valve Mat">60mm Valve Mat</option>
+                                    <option value="76mm Valve Mat">76mm Valve Mat</option>
+                                    <option value="88mm Valve Mat">88mm Valve Mat</option>
+                                    <option value="114mm Valve Mat">114mm Valve Mat</option>
+                                    <option value="139mm Valve Mat">139mm Valve Mat</option>
+                                    <option value="168mm Valve Mat">168mm Valve Mat</option>
+                                    <option value="219mm Valve Mat">219mm Valve Mat</option>
+
+                                </select>
+                            </td>
+
+                            <td><input readonly="" class="shortbox" id="pnb_@id" type="text" /></td>
+                            
+                            <td><input  readonly="" class="shortbox" id="he_@id" type="text" /></td>
+                            @*<td><input readonly=""  class="shortbox" id="elop_@id" type="text" /></td>*@
+                            <td><input  readonly="" id="hlb_@id" class="shortbox calAnualHeatOutput" type="text" /></td>
+                            <td><input  readonly="" id="hla_@id" class="shortbox calAnualHeatOutput" type="text" /></td>
+                            <td class="secondTwo"><input readonly id="diff_@id" class="shortbox" type="text" /></td>
+                            <td class="thirdGreen"><input readonly id="sav_@id" class="shortbox" type="text" /></td>
+
+                            <td><select id="nooffit_@id" onchange="noOfFittingChanged(this)" class="firstFive">
+                                <option value="0">&nbsp;</option>
+                                @{
+                                    for (var k = 1; k < 251; k++)
+                                    {
+                                        <option value="@k">@k</option>
+                                    }
+                                }
+                                </select></td>
+
+
+                            <td class="thirdGreen"><input readonly id="tsaving_@id" class="shortbox tsaving" type="text" /></td>
+                            <td class="thirdGreen"><input readonly id="kwhyr_@id" class="shortbox kwhyr" type="text" /></td>
+
+                            <td class="thirdGreen"><input readonly id="tcost_@id" class="shortbox tcost" type="text" /></td>                      
+                            <td class=""><select onchange="assIncludedChange(this)" id="assInclu_@id"><option value="No">No</option><option value="Yes"> Yes</option></select></td>
+
+                          </tr>
+                                        }
+                }
+            </tbody>
+        </table>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>CURRENT ENERGY USAGE (kWh)</th>
+                    <th>PROJECTED SAVINGS (kWh)</th>
+                    <th>NEW ENERGY USAGE (kWh)</th>
+                    <th>ESTIMATED TOTAL PROJECT COST</th>
+                    <th>ANNUAL COST SAVINGS</th>
+
+                    <th>RETURN ON INVESTMENT (YEARS)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input readonly id="currentEnrUsage" class="shortbox1" type="text" value="N/A" /></td>
+                    <td><input readonly id="porjecSavings" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="newEnrUsage" class="shortbox1" type="text" value="N/A"/></td>
+                    <td><input readonly id="estiTotlP_cost" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="anuralCostTotl" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="reutrnOnIvst" class="shortbox1" type="text" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script>
+    function typeChanged(ref) {
+        var id = $(ref).attr('id').split('_')[1];
+
+        var opHours = $('#opHours').val();
+        if (opHours == "") {
+            alert("Please set Operating Hours");
+            $('#opHours').focus();
+            return false;
+        }
+
+        var gasPkWe = $('#gasPkWe').val();
+        if (gasPkWe == "") {
+            alert("Please set Gas ");
+            $('#gasPkWe').focus();
+            return false;
+        }
+
+        var type = $('#type_' + id).val();
+
+        if (type == "0") {
+            return;
+        }
+
+        var mappedVal = getMappedVal(type, "value");
+        $("#pnb_" + id).val(mappedVal.map);
+
+        $("#he_" + id).val(mappedVal.he);
+        $("#elop_" + id).val(mappedVal.elop);
+
+        //Heat Loss Before       
+        $("#hlb_" + id).val(mappedVal.hlb);
+
+        //Heat Loss After
+        $("#hla_" + id).val(mappedVal.hla);
+
+        //Difference
+        var val1 = $("#hlb_" + id).val();
+        var val2 = $("#hla_" + id).val();
+        var res = parseFloat(val1) - parseFloat(val2);
+        $("#diff_" + id).val(res);
+
+        //Saving per Fitting 
+        var gasPkWe = $('#gasPkWe').val();
+        var opHours = $('#opHours').val(); //opHours
+
+        if (id == 1) {
+            var savv = ((res / 1000) * parseInt(opHours)) * (parseInt(gasPkWe) / 100);
+            $("#sav_" + id).val(savv);
+        } else {
+            var savv = ((res / 1000) * 8760) * (gasPkWe / 100);
+            $("#sav_" + id).val(savv);
+        }
+
+        //Total Saving  -- dep
+        calcTotalSaving(id);
+
+        // --PROJECTED SAVINGS  dep
+        assIncludedChange();
+    }
+
+    function noOfFittingChanged(ref) {
+
+        var id = $(ref).attr('id').split('_')[1];
+        //Total Saving
+        calcTotalSaving(id);
+    }
+    function calcTotalSaving(id) {
+        var val1 = $("#nooffit_" + id).val();
+        var val2 = $("#sav_" + id).val();
+        var res = parseFloat(val1) * parseFloat(val2);
+        $("#tsaving_" + id).val(res);
+
+        // kWh/yr
+
+        var gasPkWe = $('#gasPkWe').val();
+        var oppval;
+        if (gasPkWe == "") {
+            alert("Please set Operating Hours");
+            return;
+        } else {
+            oppval = ((parseInt(gasPkWe) * 100) / 78) / 100;
+        }
+
+        var val1 = $("#tsaving_" + id).val();
+        var val2 = id == 1 ? oppval : 0.0305;
+        var res = parseFloat(val1) / parseFloat(val2);
+        $("#kwhyr_" + id).val(res);
+        
+
+        // Total Cost
+        var type = $('#type_' + id).val();
+        var mappedVal = getMappedVal(type, "value");
+        var val1 = $("#nooffit_" + id).val();
+        var res = val1 * mappedVal.cost;
+        $("#tcost_" + id).val(res);
+
+        // --PROJECTED SAVINGS  dep
+        assIncludedChange();
+    }
+
+    function assIncludedChange(ref) {
+        // PROJECTED SAVINGS 
+        $('#porjecSavings').val(calcTotalForClass('kwhyr'));
+
+        // ESTIMATED TOTAL PROJECT COST
+        $('#estiTotlP_cost').val(calcTotalForClass('tcost'));
+
+        // ANNUAL COST SAVINGS
+        $('#anuralCostTotl').val(calcTotalForClass('tsaving'));
+
+        // RETURN ON INVESTMENT 
+        var val1 = $('#estiTotlP_cost').val();
+        var val2 = $('#anuralCostTotl').val();
+        var res = parseFloat(val1) / parseFloat(val2);
+        $('#reutrnOnIvst').val(res);
+    }
+
+    function calcTotalForClass(className) {
+        var eles = $("."+className);
+        var total = 0;
+        for (var i = 0; i < eles.length; i++) {
+            var cEle = $(eles[i]);
+            var val = parseFloat(cEle.val());
+            var op = $("#assInclu_" + cEle.attr('id').split('_')[1]).val();
+            if (!isNaN(val)) {
+                if (op == "Yes")
+                    total = total + val;
+            }
+        }
+        return total;
+    }
+
+</script>
+<script>
+    function getMappedVal(name, prop) {
+        var found = mapArry.find(function (element) {
+            return element[prop] == name;
+        });
+        return found;
+    }
+    var mapArry = [
+    { value: "20mm Flange Mat", map: 0.5, he: 73.3, elop: 0.5,hlb:36.65, hla: 4.64, sav: 960300, cost: 16.50 },
+    { value: "27mm Flange Mat", map: 0.75, he: 89.9, elop: 0.5,hlb:44.95, hla: 5.03 , sav:209819.52, cost:16.50},
+    { value: "34mm Flange Mat", map: 1, he: 109.6, elop: 0.5,hlb:54.8, hla: 5.535 , sav:258936.84, cost:17.88},
+    { value: "42mm Flange Mat", map: 1.25, he: 132.5, elop: 0.5,hlb:66.25, hla: 6.15 , sav:315885.60, cost:18.56},
+    { value: "48mm Flange Mat", map: 1.5, he: 149.8, elop: 0.5,hlb:74.9, hla: 6.47 , sav:359668.08, cost:19.94},
+    { value: "60mm Flange Mat", map: 2, he: 181.4, elop: 0.5,hlb:90.7, hla: 7.225 , sav:438744.60, cost:21.31},
+    { value: "76mm Flange Mat", map: 2.5, he: 223, elop: 0.5,hlb:111.5, hla: 8.175 , sav:543076.20, cost:24.75},
+    { value: "88mm Flange Mat", map: 3, he: 255.3, elop: 0.5,hlb:127.65, hla: 8.955 , sav:623860.92, cost:27.50},
+    { value: "114mm Flange Mat", map: 4, he: 319.2, elop: 0.5,hlb:159.6, hla: 10.385 , sav:784274.04, cost:31.63},
+    { value: "139mm Flange Mat", map: 5, he: 381.4, elop: 0.5,hlb:190.7, hla: 11.855 , sav:940009.32, cost:34.38},
+    { value: "168mm Flange Mat", map: 6, he: 449.8, elop: 0.5,hlb:224.9, hla: 13.445 , sav:1111407.48, cost:38.50},
+    { value: "219mm Flange Mat", map: 7, he: 569, elop: 0.5,hlb:284.5, hla: 16.27 , sav:1409816.88, cost:44.00},
+    { value: "20mm Valve Mat", map: 0.5, he: 73.3, elop: 1,hlb:73.3, hla: 9.28 , sav:336489.12, cost:16.50},
+    { value: "27mm Valve Mat", map: 0.75, he: 89.9, elop: 1,hlb:89.9, hla: 10.06 , sav:419639.04, cost:16.50},
+    { value: "34mm Valve Mat", map: 1, he: 109.6, elop: 1,hlb:109.6, hla: 11.07 , sav:517873.68, cost:17.88},
+    { value: "42mm Valve Mat", map: 1.25, he: 132.5, elop: 1,hlb:132.5, hla: 12.3 , sav:631771.20, cost:18.56},
+    { value: "48mm Valve Mat", map: 1.5, he: 149.8, elop: 1,hlb:149.8, hla: 12.94 , sav:719336.16, cost:19.94},
+    { value: "60mm Valve Mat", map: 2, he: 181.4, elop: 1,hlb:181.4, hla: 14.45 , sav:877489.20, cost:21.31},
+    { value: "76mm Valve Mat", map: 2.5, he: 223, elop: 1,hlb:223, hla: 16.35 , sav:1086152.40, cost:37.13},
+    { value: "88mm Valve Mat", map: 3, he: 255.3, elop: 1,hlb:255.3, hla: 17.91 , sav:1247721.84, cost:41.25},
+    { value: "114mm Valve Mat", map: 4, he: 319.2, elop: 1,hlb:319.2, hla: 20.77 , sav:1568548.08, cost:46.75},
+     { value: "139mm Valve Mat", map: 5, he: 381.4, elop: 1,hlb:381.4, hla: 23.71 , sav:1880018.64, cost:52.25},
+     { value: "168mm Valve Mat", map: 6, he: 449.8, elop: 1,hlb:449.8, hla: 26.89 , sav:2222814.96, cost:63.25},
+     { value: "219mm Valve Mat", map: 7, he: 569, elop: 1,hlb:569, hla: 32.54, sav: 2819633.76, cost: 96.25 }];
+</script>

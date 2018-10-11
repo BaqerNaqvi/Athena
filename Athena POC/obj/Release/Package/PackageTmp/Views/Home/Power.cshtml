@@ -1,0 +1,2468 @@
+﻿
+@{
+    ViewBag.Title = "Power Flexibility";
+}
+
+<style>
+    .shortbox {
+        max-width: 200px !important;
+        width: 75px !important;
+    }
+
+    .lamp > select, .lamp > input {
+        max-width: 150px !important;
+        min-width: 150px !important;
+    }
+
+    .burnHours > input {
+        max-width: 75px !important;
+    }
+
+    .shortNumber > input {
+        max-width: 50px !important;
+    }
+
+    .variable {
+        background-color: #ffa5007a;
+    }
+
+    .secondTwo {
+        background-color: #0000ff80;
+    }
+
+    .thirdGreen {
+        background-color: #00800087;
+    }
+
+    thead {
+        background-color: #22222212;
+    }
+
+    select {
+        /*width: 95%;*/
+        height: 27px;
+    }
+
+    #powerFlexibilityTable label {
+        width: 50px;
+    }
+
+    #powerFlexibilityTable table tr td:first-child {
+        min-width: 250px;
+    }
+
+    #powerFlexibilityTable table tr td, #powerFlexibilityTable table tr td input {
+        text-align: center;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div>
+            <h5 style="text-align: center;">POWER FLEXIBILITY</h5>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div>
+            <table class="table table-bordered assets">
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="customLabel">
+                            <label>Flexible Asset(s) Type</label>
+                        </td>
+                        <td class="variable">
+                            <select id="assetsType">
+                                @{
+                                    List<string> assetTypes = new List<string>() { "Gas CHP", "Diesel Backup Generator", "Process Load", "Storage" };
+                                    <option value="0"> &nbsp;</option>
+                                    for (var j = 0; j < assetTypes.Count; j++)
+                                    {
+                                        <option value="@assetTypes[j]">@assetTypes[j]</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="customLabel">
+                            <label>Flexibility/Asset Size</label>
+                        </td>
+                        <td class="variable">
+                            <input type="number" id="assetsSize">
+                            <select id="assetsSizeType">
+                                <option value="kW">kW</option>
+                                <option value="kVA">kVA</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="customLabel">
+                            <label>Flexible Asset(s) Size (MW)</label>
+                        </td>
+                        <td class="variable">
+                            <input type="number" id="assetsSizeMW" disabled>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="customLabel">
+                            <label>Number of Asset(s) in deal</label>
+                        </td>
+                        <td class="variable">
+                            <select id="assetsInDeal">
+                                @{
+                                    <option value="0">&nbsp;</option>
+                                    for (var j = 1; j < 11; j++)
+                                    {
+                                        <option value="@j">@j</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div>
+            <table class="table table-bordered">
+                <thead>
+                </thead>
+                <tbody>
+                    @{
+                        List<string> flexibilities = new List<string>() { "TRIAD Flexibility (MW)", "CM Flexibility (MW)", "STOR Flexibility (MW)", "DTU Flexibility (MW)", "FFR Flexibility (MW)" };
+                        for (var j = 0; j < flexibilities.Count; j++)
+                        {
+                            <tr>
+                                <td class="customLabel">
+                                    <label>@flexibilities[j]</label>
+                                </td>
+                                <td class="variable disabled">
+                                    <input id="flex_@j" type="number" disabled />
+                                </td>
+                                <td class="variable">
+                                    <select id="includeFlex_@j" disabled>
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div>
+            <table class="table table-bordered">
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="customLabel">
+                            <label>TNUoS Zone</label>
+                        </td>
+                        <td class="variable">
+                            <select id="zoneNames">
+                                @{
+                                    List<string> zoneNames = new List<string>() { "17 - Northern Scotland", "18 - Southern Scotland", "15 - Northern", "16 - North West", "23 - Yorkshire", "13 - N Wales & Mersey", "11 - East Midlands", "14 - Midlands", "10 - Eastern", "21 - South Wales", "19 - South East", "12 - London", "20 - Southern", "22 - South Western" };
+                                    <option value="0"> &nbsp;</option>
+                                    for (var j = 0; j < zoneNames.Count; j++)
+                                    {
+                                        <option value="@zoneNames[j]">@zoneNames[j]</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="customLabel">
+                            <label>DNO Connection Level</label>
+                        </td>
+                        <td class="variable">
+                            <select id="connectionLevels">
+                                @{
+                                    List<string> connectionLevels = new List<string>() { "LV", "HV", "EHV" };
+                                    <option value="0"> &nbsp;</option>
+                                    for (var j = 0; j < connectionLevels.Count; j++)
+                                    {
+                                        <option value="@connectionLevels[j]">@connectionLevels[j]</option>
+                                    }
+                                }
+                            </select>
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div>
+            <table class="table table-bordered">
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="customLabel">
+                            <label>Proposed Contract Start</label>
+                        </td>
+                        <td class="variable">
+                            <input id="contractStart" type="date" min="1900-01-01" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="customLabel">
+                            <label>Proposed Contract End</label>
+                        </td>
+                        <td class="variable disabled">
+                            <input id="contractEnd" type="date" disabled />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="customLabel">
+                            <label>Contract Term (for proposition)</label>
+                        </td>
+                        <td class="variable disabled">
+                            <input id="contractTerm" type="number" disabled />
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="powerFlexibilityTable">
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="highChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ESTIMATED TOTAL PROJECT COST</th>
+                    <th>TOTAL PROJECTED SAVINGS</th>
+                    <th>TOTAL PROJECTED REVENUE</th>
+                    <th>TOTAL COMBINED EARNINGS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input readonly id="estTotalProjectCost" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="totalProjectSaving" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="totalProjectRevenue" class="shortbox1" type="text" /></td>
+                    <td><input readonly id="totalCombinedEarning" class="shortbox1" type="text" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+@Scripts.Render("~/bundles/highcharts")
+<Script>
+  ////////////////////////////////////////////////////////////////////////////////
+  var averageHH = 528.9;
+  ////////////////////////////////////////////////////////////////////////////////
+  initalization();
+  function initalization() {
+	$('#contractStart').val(getCurrentDate());
+	$('#contractEnd').val(getProposedContractDate($('#contractStart').val(), 5));
+	$('#contractTerm').val(getContractTerm($('#contractStart').val(), $('#contractEnd').val()));
+  }
+  function isContractActive(date) {
+	var date = new Date(date);
+	if (date >= new Date($('#contractStart').val()) && date < new Date($('#contractEnd').val()))
+	  return true;
+	return false;
+  }
+  //////////////////////////////////////////////////////////////////////////////
+  $('#assetsSize').on('blur', function () {
+	setAssetsSizeMW($('#assetsSize').val(), $('#assetsSizeType').val());
+  })
+  $('#assetsSizeType').on('change', function () {
+	setAssetsSizeMW($('#assetsSize').val(), $('#assetsSizeType').val());
+  })
+  function setAssetsSizeMW(assetSize, type) {
+	if (type == 'kW') {
+	  $('#assetsSizeMW').val(parseInt(assetSize) / 1000)
+	}
+	else {
+	  $('#assetsSizeMW').val(parseInt(assetSize) * 0.8 / 1000)
+	}
+	setAssetFlexbility();
+  }
+  //////////////////////////////////////////////////////////////////////////////
+  var assetsFlexibility = [
+   {
+	 "Asset_Type": "Gas CHP",
+	 "Size": "1MW",
+	 "TRIAD_Flexibility": "Yes",
+	 "CM_Capacity": "Yes",
+	 "STOR_Flexibility": "Yes",
+	 "DTU_Flexibility": "Yes",
+	 "FFR_Flexibility": "No",
+	 "CMU_Type": "EG"
+   },
+   {
+	 "Asset_Type": "Diesel Backup Generator",
+	 "Size": "0.5MW",
+	 "TRIAD_Flexibility": "Yes",
+	 "CM_Capacity": "Yes",
+	 "STOR_Flexibility": "Yes",
+	 "DTU_Flexibility": "No",
+	 "FFR_Flexibility": "No",
+	 "CMU_Type": "DSR"
+   },
+   {
+	 "Asset_Type": "Process Load",
+	 "Size": "0.5MW",
+	 "TRIAD_Flexibility": "Yes",
+	 "CM_Capacity": "Yes",
+	 "STOR_Flexibility": "Yes",
+	 "DTU_Flexibility": "No",
+	 "FFR_Flexibility": "No",
+	 "CMU_Type": "DSR"
+   },
+   {
+	 "Asset_Type": "Storage",
+	 "Size": "10MW",
+	 "TRIAD_Flexibility": "Yes",
+	 "CM_Capacity": "Yes",
+	 "STOR_Flexibility": "No",
+	 "DTU_Flexibility": "Yes",
+	 "FFR_Flexibility": "Yes",
+	 "CMU_Type": "DSR"
+   }
+  ];
+  $('.assets').on('change', '#assetsType', function () {
+	var assetFlex = getAssetFlexibility($('#assetsType').val());
+	if ("Process Load" == assetFlex.Asset_Type) {
+	  $('#assetsSize').val(averageHH);
+	  $('#assetsSize').trigger('blur');
+	  $('#assetsSize').prop('disabled', true);
+	}
+	else
+	  $('#assetsSize').prop('disabled', false);
+	$('#includeFlex_0').val(assetFlex.TRIAD_Flexibility);
+	$('#includeFlex_1').val(assetFlex.CM_Capacity);
+	$('#includeFlex_2').val(assetFlex.STOR_Flexibility);
+	$('#includeFlex_3').val(assetFlex.DTU_Flexibility);
+	$('#includeFlex_4').val(assetFlex.FFR_Flexibility);
+	setAssetFlexbility();
+  });
+  function getAssetFlexibility(assetType) {
+	var found = assetsFlexibility.find(function (element) {
+	  return element.Asset_Type == assetType;
+	});
+	return found;
+  }
+  function setAssetFlexbility() {
+	for (var i = 0; i < 5 ; i++) {
+	  if ($('#includeFlex_' + i).val() == 'Yes' && i == 1) {
+		$('#flex_' + i).val(parseFloat($('#assetsSizeMW').val()) * 0.9);
+	  }
+	  else if ($('#includeFlex_' + i).val() == 'Yes') {
+		$('#flex_' + i).val($('#assetsSizeMW').val());
+	  }
+	  else {
+		$('#flex_' + i).val(0);
+	  }
+	}
+  }
+  ///////////////////////////////////////////////////////////////////////////////
+  $('#contractStart').on('change', function () {
+	$('#contractEnd').val(getProposedContractDate($('#contractStart').val(), 5));
+	$('#contractTerm').val(getContractTerm($('#contractStart').val(), $('#contractEnd').val()));
+  });
+  $('body').on('change', 'input, select', function (){
+    reloadGraph();
+  });
+  function getCurrentDate() {
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth() + 1; //January is 0!
+
+	var yyyy = today.getFullYear();
+	if (dd < 10) {
+	  dd = '0' + dd;
+	}
+	if (mm < 10) {
+	  mm = '0' + mm;
+	}
+	var today = yyyy + '-' + mm + '-' + dd;
+	return today;
+  }
+  function getProposedContractDate(contractStart, addition) {
+	var proposed = new Date(contractStart);
+	proposed.setFullYear(proposed.getFullYear() + addition);
+	proposed.setMonth(proposed.getMonth() + addition);
+	var dd = proposed.getDate();
+	var mm = proposed.getMonth() + 1; //January is 0!
+
+	var yyyy = proposed.getFullYear();
+	if (dd < 10) {
+	  dd = '0' + dd;
+	}
+	if (mm < 10) {
+	  mm = '0' + mm;
+	}
+	var proposed = yyyy + '-' + mm + '-' + dd;
+	return proposed;
+  }
+  function getContractTerm(contractStart, contractEnd) {
+	var start = new Date(contractStart);
+	var end = new Date(contractEnd);
+
+	var diff = (end.getTime() - start.getTime()) / 1000;
+	diff /= (60 * 60 * 24);
+	return Math.abs(Math.round(diff / 365.25));
+  }
+  /////////////////////////////////////////////////////////////////////////////
+  //Highcharts.chart('highChart', {
+  //  chart: {
+  //    type: 'column'
+  //  },
+  //  title: {
+  //    text: 'Stacked column chart'
+  //  },
+  //  xAxis: {
+  //    categories: ['2017', '2018', '2019', '2020', '2021', '2022', '2023']
+  //  },
+  //  yAxis: {
+  //    min: 0,
+  //    title: {
+  //  	text: 'Total fruit consumption'
+  //    },
+  //    stackLabels: {
+  //  	enabled: true,
+  //  	style: {
+  //  	  fontWeight: 'bold',
+  //  	  color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+  //  	}
+  //    }
+  //  },
+  //  legend: {
+  //    align: 'right',
+  //    x: -30,
+  //    verticalAlign: 'top',
+  //    y: 25,
+  //    floating: true,
+  //    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+  //    borderColor: '#CCC',
+  //    borderWidth: 1,
+  //    shadow: false
+  //  },
+  //  tooltip: {
+  //    headerFormat: '<b>{point.x}</b><br/>',
+  //    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+  //  },
+  //  plotOptions: {
+  //    column: {
+  //  	stacking: 'normal',
+  //  	dataLabels: {
+  //  	  enabled: true,
+  //  	  color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+  //  	}
+  //    }
+  //  },
+  //  series: [{
+  //    name: 'John',
+  //    data: [5, 3, 4, 7, 2, 0, 0]
+  //  }, {
+  //    name: 'Jane',
+  //    data: [2, 2, 3, 2, 1, 0, 0]
+  //  }, {
+  //    name: 'Joe',
+  //    data: [3, 4, 4, 2, 5, 0, 0]
+  //  }]
+  //});
+  ////////////////////////////////////////////////////////////////////////////////
+  function reloadGraph()
+  {
+    var startDate = new Date($('#contractStart').val());
+    var endDate = new Date($('#contractEnd').val());
+    var triadArray = [];
+    var cmArray = [];
+    var storArray = [];
+    var dtuArray = [];
+    var ffrArray = [];
+    var categories = [];
+    var revenues = [];
+    if (startDate < new Date("4/1/2017")) {
+      startDate = new Date("4/1/2017");
+    }
+    while(startDate < endDate && startDate < new Date("10/1/2023"))
+    {
+      var triadValue = 0;
+      var cmValue = 0;
+      var storValue = 0;
+      var dtuValue = 0;
+      var ffrValue = 0;
+      var previousYear = startDate.getFullYear();
+      categories.push(previousYear);
+      while (startDate < endDate && startDate < new Date("10/1/2023") && startDate.getFullYear() == previousYear) {
+        triadValue += getTRIADCustomerGrossFlex($('#flex_0').val(), $('#zoneNames').val(), "Yellow", startDate, 11, 1);
+        cmValue += getCustomerGrossFlexRevenue($('#flex_1').val(), startDate, 10, 1);
+        storValue += getSTORCustomerGrossFlexRevenue($('#flex_2').val(), startDate);
+        dtuValue += getDTUCustomerGrossFlexRevenue($('#flex_3').val(), startDate);
+        ffrValue += getFFRCustomerGrossRevenue(0, $('#flex_4').val(), startDate);
+        startDate.setMonth(startDate.getMonth() + 1);
+      }
+      triadArray.push(Math.round(triadValue));
+      cmArray.push(Math.round(cmValue));
+      storArray.push(Math.round(storValue));
+      dtuArray.push(Math.round(dtuValue));
+      ffrArray.push(Math.round(ffrValue));
+      revenues.push(Math.round((triadValue + cmValue + storValue + dtuValue + ffrValue) * 1000));
+    }
+    var projectedSaving = 0;
+    for (var i = 0; i < triadArray.length; i++) {
+      projectedSaving += triadArray[i];
+    }
+    projectedSaving *= 1000;
+    projectedSaving = Math.round(projectedSaving);
+    var projectedRevenue = 0;
+    for (var i = 0; i < revenues.length; i++) {
+      projectedRevenue += revenues[i];
+    }
+    projectedRevenue = projectedRevenue - projectedSaving;
+    var combinedEarning = projectedSaving + projectedRevenue;
+    var series = [{
+      name: "TRIAD",
+      data: triadArray
+    }, {
+      name: "CM",
+      data: cmArray
+    }, {
+      name: "STOR",
+      data: storArray
+    }, {
+      name: "DTU",
+      data: dtuArray
+    }, {
+      name: "FFR",
+      data: ffrArray
+    }
+    ];
+    Highcharts.chart('highChart', {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Stacked column chart'
+      },
+      xAxis: {
+        categories: categories
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'Total fruit consumption'
+        },
+        stackLabels: {
+          enabled: true,
+          style: {
+            fontWeight: 'bold',
+            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+          }
+        }
+      },
+      legend: {
+        align: 'right',
+        x: -30,
+        verticalAlign: 'top',
+        y: 25,
+        floating: true,
+        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+        borderColor: '#CCC',
+        borderWidth: 1,
+        shadow: false
+      },
+      tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+      },
+      plotOptions: {
+        column: {
+          stacking: 'normal',
+          dataLabels: {
+            enabled: true,
+            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+          }
+        }
+      },
+      series: series
+    });
+    var table = $('<table>').addClass('table table-bordered disabled');
+    var tCell;
+    var row = $('<tr>');
+    row.append($('<td>').html(''));
+    for (var j = 0; j < categories.length; j++) {
+      tCell = $('<td>').html(categories[j]);
+      row.append(tCell);
+    }
+    table.append(row);
+    row = $('<tr>');
+    row.append($('<td>').addClass('thirdGreen').html('Capacity Market'));
+    for (var j = 0 ; j < cmArray.length ; j++) {
+      tCell = $('<td>').addClass('thirdGreen').html($('<input>').val('£' + cmArray[j]).prop('readonly', true));
+      row.append(tCell);
+    }
+    table.append(row);
+    row = $('<tr>');
+    row.append($('<td>').addClass('thirdGreen').html('TRIAD Avoidance'));
+    for (var j = 0 ; j < triadArray.length ; j++) {
+      tCell = $('<td>').addClass('thirdGreen').html($('<input>').val('£' + triadArray[j]).prop('readonly', true));
+      row.append(tCell);
+    }
+    table.append(row);
+    row = $('<tr>');
+    row.append($('<td>').addClass('thirdGreen').html('STOR'));
+    for (var j = 0 ; j < storArray.length ; j++) {
+      tCell = $('<td>').addClass('thirdGreen').html($('<input>').val('£' + storArray[j]).prop('readonly', true));
+      row.append(tCell);
+    }
+    table.append(row);
+    row = $('<tr>');
+    row.append($('<td>').addClass('thirdGreen').html('DTU'));
+    for (var j = 0 ; j < dtuArray.length ; j++) {
+      tCell = $('<td>').addClass('thirdGreen').html($('<input>').val('£' + dtuArray[j]).prop('readonly', true));
+      row.append(tCell);
+    }
+    table.append(row);
+    row = $('<tr>');
+    row.append($('<td>').addClass('thirdGreen').html('Firm Frequency Response'));
+    for (var j = 0 ; j < ffrArray.length ; j++) {
+      tCell = $('<td>').addClass('thirdGreen').html($('<input>').val('£' + ffrArray[j]).prop('readonly', true));
+      row.append(tCell);
+    }
+    table.append(row);
+    row = $('<tr>');
+    row.append($('<td>').html(''));
+    for (var j = 0 ; j < revenues.length ; j++) {
+      tCell = $('<td>').html('£' + revenues[j]);
+      row.append(tCell);
+    }
+    table.append(row);
+    $('#powerFlexibilityTable').empty();
+    $('#powerFlexibilityTable').append(table);
+    $('#estTotalProjectCost').val('£' + 0);
+    $('#totalProjectSaving').val('£' + projectedSaving);
+    $('#totalProjectRevenue').val('£' + projectedRevenue);
+    $('#totalCombinedEarning').val('£' + combinedEarning);
+  }
+  ////////////////////////////////////////CM//////////////////////////////////////
+  var CMPriceForecast = [
+  {
+	"After_Month": "10/1/2016",
+	"T_4": "Error",
+	"T_1": "Error"
+  },
+  {
+	"After_Month": "10/1/2017",
+	"T_4": "Error",
+	"T_1": 6.95
+  },
+  {
+	"After_Month": "10/1/2018",
+	"T_4": "Error",
+	"T_1": 25
+  },
+  {
+	"After_Month": "10/1/2019",
+	"T_4": "Error",
+	"T_1": 7
+  },
+  {
+	"After_Month": "10/1/2020",
+	"T_4": 22.5,
+	"T_1": 7
+  },
+  {
+	"After_Month": "10/1/2021",
+	"T_4": 30,
+	"T_1": 7
+  },
+  {
+	"After_Month": "10/1/2022",
+	"T_4": 30,
+	"T_1": 7
+  }
+  ];
+  function isCMActive(year) {
+	var date = new Date(year);
+	//var startDate = new Date("10/1/" + date.getFullYear());
+	//var endDate = new Date("9/30/" + date.getFullYear());
+	if (date >= new Date('10/1/2018') && date >= new Date($('#contractStart').val()) && date < new Date($('#contractEnd').val()))
+	  return true;
+	return false;
+  }
+  function getCMInfluencingDate(date) {
+    var date = new Date(date);
+    var month = date.getMonth();
+    if (month < 9) {
+      return "10/1/" + (parseInt(date.getFullYear()) - 1);
+    }
+    else {
+      return "10/1/" + date.getFullYear();
+    }
+  }
+  function getActiveCMCapacity(cmCapacity, year) {
+    return isNaN(cmCapacity) ? 0 : isCMActive(getCMInfluencingDate(year)) * cmCapacity;
+  }
+  function getCMUType() {
+	var assetFlex = getAssetFlexibility($('#assetsType').val());
+	return assetFlex.CMU_Type;
+  }
+  function getCMAuction(year) {
+	var date = new Date(year);
+	if (date >= new Date("10/1/2021"))
+	  return "T_4";
+	return "T_1";
+  }
+  function getCMFacilitationFee(cmCapacity, year) {
+	if (!isNaN(cmCapacity) && getActiveCMCapacity(cmCapacity, year) > 5)
+	  return .25;
+	return .30;
+  }
+  function getCompiledCMCapacity(cmCapacity, year) {
+	return getActiveCMCapacity(cmCapacity, year);
+  }
+  function getCMCapacityPaymentRate(date, month, day) {
+	var d = new Date(date);
+	var newDate = "";
+	if (d.getDate() >= day && d.getMonth() >= (month - 1))
+	  newDate = month + "/" + day + "/" + d.getFullYear();
+	else
+	  newDate = month + "/" + day + "/" + (parseInt(d.getFullYear()) - 1);
+	var monthCapacityRate = getCMPriceForecast(newDate);
+	return isNaN(monthCapacityRate[getCMAuction(newDate)]) ? 0 : monthCapacityRate[getCMAuction(newDate)] / 12;
+  }
+  function getCMPriceForecast(date) {
+	var found = CMPriceForecast.find(function (element) {
+	  return element.After_Month == date;
+	});
+	return found;
+  }
+  function getCMFlexRevenues(cmCapacity, date, month, day) {
+	return getCMCapacityPaymentRate(date, month, day) * getCompiledCMCapacity(cmCapacity, date);
+  }
+  function getCMEONFacilitationFeePercentage(cmCapacity, year) {
+    var result = getCMFacilitationFee(cmCapacity, year) * isCMActive(getCMInfluencingDate(year));
+	return isNaN(result) ? 0 : result;
+  }
+  function getCMEONFacilitationFeePound(cmCapacity, date, month, day) {
+	return getCMEONFacilitationFeePercentage(cmCapacity, date) * getCMFlexRevenues(cmCapacity, date, month, day) * -1;
+  }
+  function getCustomerGrossFlexRevenue(cmCapacity, date, month, day) {
+	var x = getCMFlexRevenues(cmCapacity, date, month, day) + getCMEONFacilitationFeePound(cmCapacity, date, month, day);
+	return getCMFlexRevenues(cmCapacity, date, month, day) + getCMEONFacilitationFeePound(cmCapacity, date, month, day);
+  }
+  ////////////////////////////////////////SPILL PERCENTAGE CALCULATION//////////////////////////////////////
+  var averageConsumption = Math.round(averageHH);
+  var averageConsumptionMW = (averageConsumption) / 1000;
+  function getSpillPercentage() {
+	//$('#assetsSizeMW').val(3); ///////////////////////////////////////////////////////////////////////////////////////////
+	var x = $('#assetsSizeMW').val() - averageConsumptionMW;
+	return x > 0 ? x / $('#assetsSizeMW').val() : 0;
+  }
+  ////////////////////////////////////////TRIAD//////////////////////////////////////
+  var hhDemandTraffic = [
+  {
+	"NG_Zone": 1,
+	"Zone_Name": "17 - Northern Scotland",
+	"_11_1_2017": 29.58,
+	"_11_1_2018": 47.2,
+	"_11_1_2019": 53.96,
+	"_11_1_2020": 59.83,
+	"_11_1_2021": 64.78,
+	"_11_1_2022": 64.78
+  },
+  {
+	"NG_Zone": 2,
+	"Zone_Name": "18 - Southern Scotland",
+	"_11_1_2017": 30.48,
+	"_11_1_2018": 32.07,
+	"_11_1_2019": 37.2,
+	"_11_1_2020": 43.5,
+	"_11_1_2021": 47,
+	"_11_1_2022": 47
+  },
+  {
+	"NG_Zone": 3,
+	"Zone_Name": "15 - Northern",
+	"_11_1_2017": 39.22,
+	"_11_1_2018": 43.06,
+	"_11_1_2019": 48.7,
+	"_11_1_2020": 53.61,
+	"_11_1_2021": 58.6,
+	"_11_1_2022": 58.6
+  },
+  {
+	"NG_Zone": 4,
+	"Zone_Name": "16 - North West",
+	"_11_1_2017": 45.25,
+	"_11_1_2018": 49.96,
+	"_11_1_2019": 55.84,
+	"_11_1_2020": 61.64,
+	"_11_1_2021": 66.94,
+	"_11_1_2022": 66.94
+  },
+  {
+	"NG_Zone": 5,
+	"Zone_Name": "23 - Yorkshire",
+	"_11_1_2017": 44.97,
+	"_11_1_2018": 49.84,
+	"_11_1_2019": 55.7,
+	"_11_1_2020": 61.17,
+	"_11_1_2021": 66.43,
+	"_11_1_2022": 66.43
+  },
+  {
+	"NG_Zone": 6,
+	"Zone_Name": "13 - N Wales & Mersey",
+	"_11_1_2017": 46.79,
+	"_11_1_2018": 51.29,
+	"_11_1_2019": 57.18,
+	"_11_1_2020": 63.24,
+	"_11_1_2021": 69.08,
+	"_11_1_2022": 69.08
+  },
+  {
+	"NG_Zone": 7,
+	"Zone_Name": "11 - East Midlands",
+	"_11_1_2017": 47.89,
+	"_11_1_2018": 53.18,
+	"_11_1_2019": 59.2,
+	"_11_1_2020": 64.97,
+	"_11_1_2021": 70.5,
+	"_11_1_2022": 70.5
+  },
+  {
+	"NG_Zone": 8,
+	"Zone_Name": "14 - Midlands",
+	"_11_1_2017": 49.46,
+	"_11_1_2018": 54.49,
+	"_11_1_2019": 60.49,
+	"_11_1_2020": 66.43,
+	"_11_1_2021": 72.41,
+	"_11_1_2022": 72.41
+  },
+  {
+	"NG_Zone": 9,
+	"Zone_Name": "10 - Eastern",
+	"_11_1_2017": 49.62,
+	"_11_1_2018": 54.95,
+	"_11_1_2019": 60.66,
+	"_11_1_2020": 66.49,
+	"_11_1_2021": 72.33,
+	"_11_1_2022": 72.33
+  },
+  {
+	"NG_Zone": 10,
+	"Zone_Name": "21 - South Wales",
+	"_11_1_2017": 45.55,
+	"_11_1_2018": 50.61,
+	"_11_1_2019": 56.36,
+	"_11_1_2020": 62.58,
+	"_11_1_2021": 71.97,
+	"_11_1_2022": 71.97
+  },
+  {
+	"NG_Zone": 11,
+	"Zone_Name": "19 - South East",
+	"_11_1_2017": 52.54,
+	"_11_1_2018": 57.31,
+	"_11_1_2019": 63.15,
+	"_11_1_2020": 69.14,
+	"_11_1_2021": 75.21,
+	"_11_1_2022": 75.21
+  },
+  {
+	"NG_Zone": 12,
+	"Zone_Name": "12 - London",
+	"_11_1_2017": 54.97,
+	"_11_1_2018": 60.16,
+	"_11_1_2019": 66.02,
+	"_11_1_2020": 72.09,
+	"_11_1_2021": 78.11,
+	"_11_1_2022": 78.11
+  },
+  {
+	"NG_Zone": 13,
+	"Zone_Name": "20 - Southern",
+	"_11_1_2017": 53.41,
+	"_11_1_2018": 58.44,
+	"_11_1_2019": 63.85,
+	"_11_1_2020": 70,
+	"_11_1_2021": 76.38,
+	"_11_1_2022": 76.38
+  },
+  {
+	"NG_Zone": 14,
+	"Zone_Name": "22 - South Western",
+	"_11_1_2017": 51.96,
+	"_11_1_2018": 56.89,
+	"_11_1_2019": 63.51,
+	"_11_1_2020": 67.44,
+	"_11_1_2021": 74.78,
+	"_11_1_2022": 74.78
+  }
+  ];
+  var hhExportRates = [
+  {
+	"NG_Zone": 1,
+	"Zone_Name": 1,
+	"_11_1_2017": "17 - Northern Scotland",
+	"_11_1_2018": 29.58,
+	"_11_1_2019": 27.03,
+	"_11_1_2020": 12.57,
+	"_11_1_2021": 0,
+	"_11_1_2022": 0
+  },
+  {
+	"NG_Zone": 2,
+	"Zone_Name": "18 - Southern Scotland",
+	"_11_1_2017": 30.48,
+	"_11_1_2018": 11.9,
+	"_11_1_2019": 0,
+	"_11_1_2020": 0,
+	"_11_1_2021": 0,
+	"_11_1_2022": 0
+  },
+  {
+	"NG_Zone": 3,
+	"Zone_Name": "15 - Northern",
+	"_11_1_2017": 39.22,
+	"_11_1_2018": 22.89,
+	"_11_1_2019": 7.31,
+	"_11_1_2020": 0,
+	"_11_1_2021": 0,
+	"_11_1_2022": 0
+  },
+  {
+	"NG_Zone": 4,
+	"Zone_Name": "16 - North West",
+	"_11_1_2017": 45.25,
+	"_11_1_2018": 29.79,
+	"_11_1_2019": 14.45,
+	"_11_1_2020": 0,
+	"_11_1_2021": 0,
+	"_11_1_2022": 0
+  },
+  {
+	"NG_Zone": 5,
+	"Zone_Name": "23 - Yorkshire",
+	"_11_1_2017": 44.97,
+	"_11_1_2018": 29.68,
+	"_11_1_2019": 14.31,
+	"_11_1_2020": 0,
+	"_11_1_2021": 0,
+	"_11_1_2022": 0
+  },
+  {
+	"NG_Zone": 6,
+	"Zone_Name": "13 - N Wales & Mersey",
+	"_11_1_2017": 46.79,
+	"_11_1_2018": 31.12,
+	"_11_1_2019": 15.79,
+	"_11_1_2020": 0.25,
+	"_11_1_2021": 1.17,
+	"_11_1_2022": 1.17
+  },
+  {
+	"NG_Zone": 7,
+	"Zone_Name": "11 - East Midlands",
+	"_11_1_2017": 47.89,
+	"_11_1_2018": 33.01,
+	"_11_1_2019": 17.82,
+	"_11_1_2020": 1.99,
+	"_11_1_2021": 2.59,
+	"_11_1_2022": 2.59
+  },
+  {
+	"NG_Zone": 8,
+	"Zone_Name": "14 - Midlands",
+	"_11_1_2017": 49.46,
+	"_11_1_2018": 34.32,
+	"_11_1_2019": 19.1,
+	"_11_1_2020": 3.45,
+	"_11_1_2021": 4.49,
+	"_11_1_2022": 4.49
+  },
+  {
+	"NG_Zone": 9,
+	"Zone_Name": "10 - Eastern",
+	"_11_1_2017": 49.62,
+	"_11_1_2018": 34.78,
+	"_11_1_2019": 19.27,
+	"_11_1_2020": 3.51,
+	"_11_1_2021": 4.41,
+	"_11_1_2022": 4.41
+  },
+  {
+	"NG_Zone": 10,
+	"Zone_Name": "21 - South Wales",
+	"_11_1_2017": 45.55,
+	"_11_1_2018": 30.44,
+	"_11_1_2019": 14.97,
+	"_11_1_2020": 0,
+	"_11_1_2021": 4.05,
+	"_11_1_2022": 4.05
+  },
+  {
+	"NG_Zone": 11,
+	"Zone_Name": "19 - South East",
+	"_11_1_2017": 52.54,
+	"_11_1_2018": 37.14,
+	"_11_1_2019": 21.76,
+	"_11_1_2020": 6.15,
+	"_11_1_2021": 7.29,
+	"_11_1_2022": 7.29
+  },
+  {
+	"NG_Zone": 12,
+	"Zone_Name": "12 - London",
+	"_11_1_2017": 54.97,
+	"_11_1_2018": 39.99,
+	"_11_1_2019": 24.63,
+	"_11_1_2020": 9.11,
+	"_11_1_2021": 10.19,
+	"_11_1_2022": 10.19
+  },
+  {
+	"NG_Zone": 13,
+	"Zone_Name": "20 - Southern",
+	"_11_1_2017": 53.41,
+	"_11_1_2018": 38.27,
+	"_11_1_2019": 22.47,
+	"_11_1_2020": 7.01,
+	"_11_1_2021": 8.46,
+	"_11_1_2022": 8.46
+  },
+  {
+	"NG_Zone": 14,
+	"Zone_Name": "22 - South Western",
+	"_11_1_2017": 51.96,
+	"_11_1_2018": 36.72,
+	"_11_1_2019": 22.12,
+	"_11_1_2020": 4.46,
+	"_11_1_2021": 6.86,
+	"_11_1_2022": 6.86
+  }
+  ];
+  function getHHDemandTraffic(zoneName) {
+	var found = hhDemandTraffic.find(function (element) {
+	  return element.Zone_Name == zoneName;
+	});
+	return found;
+  }
+  function getHHExportRates(zoneName) {
+	var found = hhExportRates.find(function (element) {
+	  return element.Zone_Name == zoneName;
+	});
+	return found;
+  }
+  function isTRIADActive(year) {
+	var date = new Date(year);
+	var startDate = new Date("2/28/" + (parseInt(date.getFullYear()) + 1));
+	var endDate = startDate;
+	if (startDate >= new Date($('#contractStart').val()) && endDate < new Date($('#contractEnd').val()))
+	  return true;
+	return false;
+  }
+  function getTRIADInfluencingDate(date) {
+    var date = new Date(date);
+      return "2/28/" + (parseInt(date.getFullYear()) + 1);
+  }
+  function getActiveAvgTRIADFlexibility(triadFlexibility, year) {
+	return isNaN(triadFlexibility) ? 0 : isTRIADActive(year) * triadFlexibility;
+  }
+  function getTRIADHitPercentage(colorCode) {
+	if ("red" == colorCode)
+	  return .65;
+	else if ("amber" == colorCode)
+	  return .75;
+	return .95;
+  }
+  function getTRIADFacilitationFee(triadFlexibility, year) {
+	if (!isNaN(triadFlexibility) && getActiveAvgTRIADFlexibility(triadFlexibility, year) > 5)
+	  return .12;
+	return .15;
+  }
+  function getTRIADImportFlex(triadFlexibility, date, month, day) {
+	var d = new Date(date);
+	var newDate = "";
+	if (d.getDate() >= day && d.getMonth() >= (month - 1))
+	  newDate = month + "/" + day + "/" + d.getFullYear();
+	else
+	  newDate = month + "/" + day + "/" + (parseInt(d.getFullYear()) - 1);
+	var triadImportFlex = getActiveAvgTRIADFlexibility(triadFlexibility, newDate) * (1 - getSpillPercentage());
+	return triadImportFlex;
+  }
+  function getTRIADExportFlex(triadFlexibility, date, month, day) {
+	var d = new Date(date);
+	var newDate = "";
+	if (d.getDate() >= day && d.getMonth() >= (month - 1))
+	  newDate = month + "/" + day + "/" + d.getFullYear();
+	else
+	  newDate = month + "/" + day + "/" + (parseInt(d.getFullYear()) - 1);
+	var triadExportFlex = getActiveAvgTRIADFlexibility(triadFlexibility, newDate) * getSpillPercentage();
+	return triadExportFlex;
+  }
+  function isTRIADServiceActive(triadFlexibility, date, month, day) {
+	var date = new Date(date);
+	var isDateValid = date >= new Date($('#contractStart').val()) && date < new Date($('#contractEnd').val());
+	return isDateValid * (date.getMonth() < 2 || date.getMonth() > 9) && (getTRIADImportFlex(triadFlexibility, date, month, day) != 0 || getTRIADExportFlex(triadFlexibility, date, month, day) != 0);
+  }
+  function getActiveTRIADHitPercentage(triadFlexibility, colorCode, date, month, day) {
+	var date = new Date(date);
+	return isTRIADServiceActive(triadFlexibility, date, month, day) * getTRIADHitPercentage(colorCode);
+  }
+  function getTRIADFlexSavingRate(triadFlexibility, zoneName, colorCode, date, month, day) {
+	var date = new Date(date);
+	if (isTRIADServiceActive(triadFlexibility, date, month, day)) {
+	  var hhDemandTraffic = getHHDemandTraffic(zoneName);
+	  if (hhDemandTraffic != undefined && hhDemandTraffic != null) {
+	    if (date < new Date("11/1/2018"))
+	      return hhDemandTraffic._11_1_2017 * getTRIADHitPercentage(colorCode) / 4;
+	    else if (date < new Date("11/1/2019"))
+	      return hhDemandTraffic._11_1_2018 * getTRIADHitPercentage(colorCode) / 4;
+	    else if (date < new Date("11/1/2020"))
+	      return hhDemandTraffic._11_1_2019 * getTRIADHitPercentage(colorCode) / 4;
+	    else if (date < new Date("11/1/2021"))
+	      return hhDemandTraffic._11_1_2020 * getTRIADHitPercentage(colorCode) / 4;
+	    else if (date < new Date("11/1/2022"))
+	      return hhDemandTraffic._11_1_2021 * getTRIADHitPercentage(colorCode) / 4;
+	    else if (date < new Date("11/1/2023"))
+	      return hhDemandTraffic._11_1_2022 * getTRIADHitPercentage(colorCode) / 4;
+	    else
+	      return 0;
+	  }
+	}
+	return 0;
+  }
+  function getTRIADFlexRevenueRate(triadFlexibility, zoneName, colorCode, date, month, day) {
+	var date = new Date(date);
+	if (isTRIADServiceActive(triadFlexibility, date, month, day)) {
+	  var hhExportRates = getHHExportRates(zoneName);
+	  if (hhExportRates != undefined && hhExportRates != null) {
+	    if (date < new Date("11/1/2018"))
+	      return hhExportRates._11_1_2017 * getTRIADHitPercentage(colorCode) / 4;
+	    else if (date < new Date("11/1/2019"))
+	      return hhExportRates._11_1_2018 * getTRIADHitPercentage(colorCode) / 4;
+	    else if (date < new Date("11/1/2020"))
+	      return hhExportRates._11_1_2019 * getTRIADHitPercentage(colorCode) / 4;
+	    else if (date < new Date("11/1/2021"))
+	      return hhExportRates._11_1_2020 * getTRIADHitPercentage(colorCode) / 4;
+	    else if (date < new Date("11/1/2022"))
+	      return hhExportRates._11_1_2021 * getTRIADHitPercentage(colorCode) / 4;
+	    else if (date < new Date("11/1/2023"))
+	      return hhExportRates._11_1_2022 * getTRIADHitPercentage(colorCode) / 4;
+	    else
+	      return 0;
+	  }
+	}
+	return 0;
+  }
+  function getTRIADFlexSaving(triadFlexibility, zoneName, colorCode, date, month, day) {
+	return getTRIADImportFlex(triadFlexibility, date, month, day) * getTRIADFlexSavingRate(triadFlexibility, zoneName, colorCode, date, month, day);
+  }
+  function getTRIADFlexRevenue(triadFlexibility, zoneName, colorCode, date, month, day) {
+	return getTRIADExportFlex(triadFlexibility, date, month, day) * getTRIADFlexRevenueRate(triadFlexibility, zoneName, colorCode, date, month, day);
+  }
+  function getActiveTRIADFacilitationFee(triadFlexibility, date, month, day) {
+	return isTRIADServiceActive(triadFlexibility, date, month, day) * getTRIADFacilitationFee(triadFlexibility, date);
+  }
+  function getActiveTRIADFacilitationSaving(triadFlexibility, zoneName, colorCode, date, month, day) {
+	return (getTRIADFlexSaving(triadFlexibility, zoneName, colorCode, date, month, day) * getActiveTRIADFacilitationFee(triadFlexibility, date, month, day)) + (getTRIADFlexRevenue(triadFlexibility, zoneName, colorCode, date, month, day) * getActiveTRIADFacilitationFee(triadFlexibility, date, month, day))
+  }
+  function getTRIADCustomerGrossFlex(triadFlexibility, zoneName, colorCode, date, month, day) {
+	var x = getTRIADFlexSaving(triadFlexibility, zoneName, colorCode, date, month, day) + getTRIADFlexRevenue(triadFlexibility, zoneName, colorCode, date, month, day) - getActiveTRIADFacilitationSaving(triadFlexibility, zoneName, colorCode, date, month, day);
+	return getTRIADFlexSaving(triadFlexibility, zoneName, colorCode, date, month, day) + getTRIADFlexRevenue(triadFlexibility, zoneName, colorCode, date, month, day) - getActiveTRIADFacilitationSaving(triadFlexibility, zoneName, colorCode, date, month, day);
+  }
+  //getTRIADCustomerGrossFlex(3, "18 - Southern Scotland", "Yellow", "2018/10/1", 11, 1)
+  //getTRIADCustomerGrossFlex(3, "18 - Southern Scotland", "Yellow", "2018/11/1", 11, 1)
+  //getTRIADCustomerGrossFlex(3, "18 - Southern Scotland", "Yellow", "2018/12/1", 11, 1)
+  //getTRIADCustomerGrossFlex(3, "18 - Southern Scotland", "Yellow", "2019/1/1", 11, 1)
+  //getTRIADCustomerGrossFlex(3, "18 - Southern Scotland", "Yellow", "2019/2/1", 11, 1)
+  //getTRIADCustomerGrossFlex(3, "18 - Southern Scotland", "Yellow", "2019/3/1", 11, 1)
+  ////////////////////////////////////////STOR//////////////////////////////////////
+  var storAvailabilityInputs = [
+  {
+    "Month": 1,
+    "STOR_Calendar_Hours": 330,
+    "C_STOR_All_None": 0.95,
+    "C_STOR": 0.92,
+    "F_STOR": 0.8,
+    "SO_F_STOR": 0.15,
+    "TRIAD_F_STOR": 0.52
+  },
+  {
+    "Month": 2,
+    "STOR_Calendar_Hours": 332,
+    "C_STOR_All_None": 0.95,
+    "C_STOR": 0.92,
+    "F_STOR": 0.8,
+    "SO_F_STOR": 0.15,
+    "TRIAD_F_STOR": 0.52
+  },
+  {
+    "Month": 3,
+    "STOR_Calendar_Hours": 311,
+    "C_STOR_All_None": 0.95,
+    "C_STOR": 0.92,
+    "F_STOR": 0.8,
+    "SO_F_STOR": 0.15,
+    "TRIAD_F_STOR": 0.76
+  },
+  {
+    "Month": 4,
+    "STOR_Calendar_Hours": 260,
+    "C_STOR_All_None": 0.95,
+    "C_STOR": 0.92,
+    "F_STOR": 0.8,
+    "SO_F_STOR": 0.15,
+    "TRIAD_F_STOR": 0.8
+  },
+  {
+    "Month": 5,
+    "STOR_Calendar_Hours": 321,
+    "C_STOR_All_None": 0.95,
+    "C_STOR": 0.92,
+    "F_STOR": 0.8,
+    "SO_F_STOR": 0.15,
+    "TRIAD_F_STOR": 0.8
+  },
+  {
+    "Month": 6,
+    "STOR_Calendar_Hours": 321,
+    "C_STOR_All_None": 0.95,
+    "C_STOR": 0.92,
+    "F_STOR": 0.8,
+    "SO_F_STOR": 0.15,
+    "TRIAD_F_STOR": 0.8
+  },
+  {
+    "Month": 7,
+    "STOR_Calendar_Hours": 321,
+    "C_STOR_All_None": 0.95,
+    "C_STOR": 0.92,
+    "F_STOR": 0.8,
+    "SO_F_STOR": 0.15,
+    "TRIAD_F_STOR": 0.8
+  },
+  {
+    "Month": 8,
+    "STOR_Calendar_Hours": 321,
+    "C_STOR_All_None": 0.95,
+    "C_STOR": 0.92,
+    "F_STOR": 0.8,
+    "SO_F_STOR": 0.15,
+    "TRIAD_F_STOR": 0.8
+  },
+  {
+    "Month": 9,
+    "STOR_Calendar_Hours": 310,
+    "C_STOR_All_None": 0.95,
+    "C_STOR": 0.92,
+    "F_STOR": 0.8,
+    "SO_F_STOR": 0.15,
+    "TRIAD_F_STOR": 0.8
+  },
+  {
+    "Month": 10,
+    "STOR_Calendar_Hours": 315,
+    "C_STOR_All_None": 0.95,
+    "C_STOR": 0.92,
+    "F_STOR": 0.8,
+    "SO_F_STOR": 0.15,
+    "TRIAD_F_STOR": 0.8
+  },
+  {
+    "Month": 11,
+    "STOR_Calendar_Hours": 330,
+    "C_STOR_All_None": 0.95,
+    "C_STOR": 0.92,
+    "F_STOR": 0.8,
+    "SO_F_STOR": 0.15,
+    "TRIAD_F_STOR": 0.52
+  },
+  {
+    "Month": 12,
+    "STOR_Calendar_Hours": 330,
+    "C_STOR_All_None": 0.95,
+    "C_STOR": 0.92,
+    "F_STOR": 0.8,
+    "SO_F_STOR": 0.15,
+    "TRIAD_F_STOR": 0.52
+  }
+  ];
+  var storAPForecast = [
+  {
+    "After_Month": "1/1/2016",
+    "C_STOR_All_None": 2,
+    "C_STOR": 2,
+    "F_STOR": 1,
+    "SO_F_STOR": 0.85,
+    "TRIAD_F_STOR": 0.85
+  },
+  {
+    "After_Month": "4/1/2017",
+    "C_STOR_All_None": 4,
+    "C_STOR": 2,
+    "F_STOR": 1,
+    "SO_F_STOR": 0.85,
+    "TRIAD_F_STOR": 0.85
+  },
+  {
+    "After_Month": "11/1/2017",
+    "C_STOR_All_None": 5,
+    "C_STOR": 2,
+    "F_STOR": 1,
+    "SO_F_STOR": 0.85,
+    "TRIAD_F_STOR": 0.85
+  },
+  {
+    "After_Month": "4/1/2018",
+    "C_STOR_All_None": 5,
+    "C_STOR": 2.5,
+    "F_STOR": 1,
+    "SO_F_STOR": 0.85,
+    "TRIAD_F_STOR": 0.85
+  },
+  {
+    "After_Month": "11/1/2018",
+    "C_STOR_All_None": 6,
+    "C_STOR": 2.5,
+    "F_STOR": 1,
+    "SO_F_STOR": 0.85,
+    "TRIAD_F_STOR": 0.85
+  },
+  {
+    "After_Month": "4/1/2019",
+    "C_STOR_All_None": 6,
+    "C_STOR": 2.5,
+    "F_STOR": 1,
+    "SO_F_STOR": 0.85,
+    "TRIAD_F_STOR": 0.85
+  },
+  {
+    "After_Month": "11/1/2019",
+    "C_STOR_All_None": 7,
+    "C_STOR": 2.5,
+    "F_STOR": 1,
+    "SO_F_STOR": 0.85,
+    "TRIAD_F_STOR": 0.85
+  },
+  {
+    "After_Month": "4/1/2020",
+    "C_STOR_All_None": 7,
+    "C_STOR": 2.5,
+    "F_STOR": 1,
+    "SO_F_STOR": 0.85,
+    "TRIAD_F_STOR": 0.85
+  },
+  {
+    "After_Month": "11/1/2020",
+    "C_STOR_All_None": 8,
+    "C_STOR": 2.5,
+    "F_STOR": 1,
+    "SO_F_STOR": 0.85,
+    "TRIAD_F_STOR": 0.85
+  },
+  {
+    "After_Month": "4/1/2021",
+    "C_STOR_All_None": 8,
+    "C_STOR": 2.5,
+    "F_STOR": 1,
+    "SO_F_STOR": 0.85,
+    "TRIAD_F_STOR": 0.85
+  },
+  {
+    "After_Month": "11/1/2021",
+    "C_STOR_All_None": 8,
+    "C_STOR": 2.5,
+    "F_STOR": 1,
+    "SO_F_STOR": 0.85,
+    "TRIAD_F_STOR": 0.85
+  },
+  {
+    "After_Month": "4/1/2022",
+    "C_STOR_All_None": 8,
+    "C_STOR": 2.5,
+    "F_STOR": 1,
+    "SO_F_STOR": 0.85,
+    "TRIAD_F_STOR": 0.85
+  },
+  {
+    "After_Month": "11/1/2022",
+    "C_STOR_All_None": 8,
+    "C_STOR": 2.5,
+    "F_STOR": 1,
+    "SO_F_STOR": 0.85,
+    "TRIAD_F_STOR": 0.85
+  },
+  {
+    "After_Month": "4/1/2023",
+    "C_STOR_All_None": 8,
+    "C_STOR": 2.5,
+    "F_STOR": 1,
+    "SO_F_STOR": 0.85,
+    "TRIAD_F_STOR": 0.85
+  }
+  ];
+  var storUtilizationHourForecast = [
+  {
+    "Month": 1,
+    "High": 3,
+    "Medium": 6,
+    "Low": 8
+  },
+  {
+    "Month": 2,
+    "High": 3,
+    "Medium": 6,
+    "Low": 8
+  },
+  {
+    "Month": 3,
+    "High": 3,
+    "Medium": 6,
+    "Low": 8
+  },
+  {
+    "Month": 4,
+    "High": 1,
+    "Medium": 2,
+    "Low": 4
+  },
+  {
+    "Month": 5,
+    "High": 1,
+    "Medium": 2,
+    "Low": 4
+  },
+  {
+    "Month": 6,
+    "High": 1,
+    "Medium": 2,
+    "Low": 4
+  },
+  {
+    "Month": 7,
+    "High": 1,
+    "Medium": 2,
+    "Low": 4
+  },
+  {
+    "Month": 8,
+    "High": 1,
+    "Medium": 2,
+    "Low": 4
+  },
+  {
+    "Month": 9,
+    "High": 1,
+    "Medium": 2,
+    "Low": 4
+  },
+  {
+    "Month": 10,
+    "High": 3,
+    "Medium": 6,
+    "Low": 8
+  },
+  {
+    "Month": 11,
+    "High": 3,
+    "Medium": 6,
+    "Low": 8
+  },
+  {
+    "Month": 12,
+    "High": 3,
+    "Medium": 6,
+    "Low": 8
+  }
+  ];
+  var storUtilizationPriceForecast = [
+  {
+    "After_Month": "1/1/2016",
+    "High": 160,
+    "Medium": 130,
+    "Low": 110
+  },
+  {
+    "After_Month": "4/1/2017",
+    "High": 160,
+    "Medium": 130,
+    "Low": 110
+  },
+  {
+    "After_Month": "11/1/2017",
+    "High": 160,
+    "Medium": 130,
+    "Low": 110
+  },
+  {
+    "After_Month": "4/1/2018",
+    "High": 160,
+    "Medium": 130,
+    "Low": 110
+  },
+  {
+    "After_Month": "11/1/2018",
+    "High": 160,
+    "Medium": 130,
+    "Low": 110
+  },
+  {
+    "After_Month": "4/1/2019",
+    "High": 160,
+    "Medium": 130,
+    "Low": 110
+  },
+  {
+    "After_Month": "11/1/2019",
+    "High": 160,
+    "Medium": 130,
+    "Low": 110
+  },
+  {
+    "After_Month": "4/1/2020",
+    "High": 160,
+    "Medium": 130,
+    "Low": 110
+  },
+  {
+    "After_Month": "11/1/2020",
+    "High": 160,
+    "Medium": 130,
+    "Low": 110
+  },
+  {
+    "After_Month": "4/1/2021",
+    "High": 160,
+    "Medium": 130,
+    "Low": 110
+  },
+  {
+    "After_Month": "11/1/2021",
+    "High": 160,
+    "Medium": 130,
+    "Low": 110
+  },
+  {
+    "After_Month": "4/1/2022",
+    "High": 160,
+    "Medium": 130,
+    "Low": 110
+  },
+  {
+    "After_Month": "11/1/2022",
+    "High": 160,
+    "Medium": 130,
+    "Low": 110
+  },
+  {
+    "After_Month": "4/1/2023",
+    "High": 160,
+    "Medium": 130,
+    "Low": 110
+  }
+  ];
+  function getSTORAvailabilityInputs(month) {
+    var found = storAvailabilityInputs.find(function (element) {
+      return element.Month == month;
+    });
+    return found;
+  }
+  function getSTORAPForecast(date) {
+    var found = storAPForecast.find(function (element) {
+      return element.After_Month == date;
+    });
+    return found;
+  }
+  function getSTORUtilizationHourForecast(month) {
+    var found = storUtilizationHourForecast.find(function (element) {
+      return element.Month == month;
+    });
+    return found;
+  }
+  function getSTORUtilizationPriceForecast(date) {
+    var found = storUtilizationPriceForecast.find(function (element) {
+      return element.After_Month == date;
+    });
+    return found;
+  }
+  function isSTORActive(yearMonthDate) {
+	var date = new Date(yearMonthDate); //1-Month(4/11)-Year
+	if (date >= new Date("11/1/2017") && date >= new Date($('#contractStart').val()) && date < new Date($('#contractEnd').val()))
+	  return true;
+	return false;
+  }
+  function getSTORFlexibility(storFlexibility, year) {
+    return isNaN(storFlexibility) ? 0 : isSTORActive(year) * storFlexibility;
+  }
+  function getSTORServiceType(monthDate)
+  {
+    var date = new Date(monthDate);
+    if ((date.getMonth() > 2 && date.getMonth() < 10) || (date >= new Date ("4/1/2021")))
+      return "C_STOR";
+    else
+      return "TRIAD_F_STOR";
+  }
+  function getSTORUtilizationPriceLevel()
+  {
+    return "Medium";
+  }
+  function getSTORAvailability(storFlexibility, year) {
+    if (getSTORFlexibility(storFlexibility, year) > 5)
+      return .25;
+    return .30;
+  }
+  function getSTORUtilization(storFlexibility, year) {
+    if (getSTORFlexibility(storFlexibility, year) > 5)
+      return .20;
+    return .25;
+  }
+  function getSTORInfluencingDate(date) {
+    var date = new Date(date);
+    var month = date.getMonth();
+    if (month < 3) {
+      return "11/1/" + (parseInt(date.getFullYear()) - 1);
+    }
+    else if (month < 10) {
+      return "4/1/" + date.getFullYear();
+    }
+    else {
+      return "11/1/" + date.getFullYear();
+    }
+  }
+  function isSTORServiceActive(yearMonthDate)
+  {
+    if (isSTORActive(yearMonthDate))
+    {
+      //var month = date.getMonth();
+      //if (month < 3)
+      //{
+      //  return isSTORActive("11/1/" + (parseInt(date.getFullYear()) - 1));
+      //}
+      //else if (month < 10)
+      //{
+      //  return isSTORActive("4/1/" + date.getFullYear());
+      //}
+      //else
+      //{
+      //  return isSTORActive("11/1/" + date.getFullYear());
+      //}
+      return isSTORActive(getSTORInfluencingDate(yearMonthDate));
+    }
+    return false;
+  }
+  function getSTORCapacityMarketed(storFlexibility, year)
+  {
+    return isSTORServiceActive(year) * getSTORFlexibility(storFlexibility, year);
+  }
+  function getSTORAvailabilityHours(date)
+  {
+    var date = new Date(date);
+    if (isSTORServiceActive(date)) {
+      var storAvailable = getSTORAvailabilityInputs((parseInt(date.getMonth()) + 1));
+      var storServiecType = getSTORServiceType(date);
+      var x = storAvailable[storServiecType];
+      return storAvailable.STOR_Calendar_Hours * x;
+    }
+    return 0;
+  }
+  function getSTORAvailabilityPrice(date)
+  {
+    var date = new Date(date);
+    if (isSTORServiceActive(date)) {
+      var storForecast = getSTORAPForecast(getSTORInfluencingDate(date));
+      var storServiecType = getSTORServiceType(date);
+      return storForecast[storServiecType];
+    }
+    return 0;
+  }
+  function getSTORAvailabilityMarketRevenue(storFlexibility, date) {
+    return (getSTORCapacityMarketed(storFlexibility, date) * getSTORAvailabilityHours(date) * getSTORAvailabilityPrice(date)) / 1000;
+  }
+  function getSTORAvailabilityFacilitationFeePercentage(storFlexibility, date) {
+    return isSTORActive(getSTORInfluencingDate(date)) * getSTORAvailability(storFlexibility, date); // only date active
+  }
+  function getSTORAvailabilityFacilitationFeePound(storFlexibility, date) {
+    return getSTORAvailabilityMarketRevenue(storFlexibility, date) * getSTORAvailabilityFacilitationFeePercentage(storFlexibility, date) * -1;
+  }
+  function getSTORUtilizationHours(date) {
+    var date = new Date(date);
+    if (isSTORServiceActive(date)) {
+      var storAvailable = getSTORAvailabilityInputs((parseInt(date.getMonth()) + 1));
+      var storServiecType = getSTORServiceType(date);
+      var x = storAvailable[storServiecType];
+      var storUtilizationHourForecast = getSTORUtilizationHourForecast((parseInt(date.getMonth()) + 1));
+      var utilizationHour = storUtilizationHourForecast[getSTORUtilizationPriceLevel()];
+      return utilizationHour * x;
+    }
+    return 0;
+  }
+  function getSTORUtilizationPrice(date) {
+    var date = new Date(date);
+    if (isSTORServiceActive(date)) {
+      var storForecast = getSTORUtilizationPriceForecast(getSTORInfluencingDate(date));
+      return storForecast[getSTORUtilizationPriceLevel()];
+    }
+    return 0;
+  }
+  function getSTORUtilizationMarketRevenue(storFlexibility, date)
+  {
+    return (getSTORCapacityMarketed(storFlexibility, date) * getSTORUtilizationHours(date) * getSTORUtilizationPrice(date)) / 1000;
+  }
+  function getSTORUtilizationFacilitationFeePercentage(storFlexibility, date) {
+    return getSTORAvailabilityFacilitationFeePercentage(storFlexibility, date);
+  }
+  function getSTORUtilizationFacilitationFeePound(storFlexibility, date) {
+    return getSTORUtilizationMarketRevenue(storFlexibility, date) * getSTORUtilizationFacilitationFeePercentage(storFlexibility, date) * -1;
+  }
+  function getSTORFlexibilityRevenue(storFlexibility, date)
+  {
+    return getSTORAvailabilityMarketRevenue(storFlexibility, date) + getSTORUtilizationMarketRevenue(storFlexibility, date);
+  }
+  function getSTORFacilitationFee(storFlexibility, date)
+  {
+    return getSTORAvailabilityFacilitationFeePound(storFlexibility, date) + getSTORUtilizationFacilitationFeePound(storFlexibility, date);
+  }
+  function getSTORCustomerGrossFlexRevenue(storFlexibility, date)
+  {
+    return getSTORFlexibilityRevenue(storFlexibility, date) + getSTORFacilitationFee(storFlexibility, date);
+  }
+  ////////////////////////////////////////DTU//////////////////////////////////////
+  //#region thisregion
+  var dtuAvailabilityInputs = [
+  {
+    "Month": 1,
+    "DTU_Calendar_Hours": 0,
+    "C_DTU": 0.95,
+    "F_DTU": 0.8
+  },
+  {
+    "Month": 2,
+    "DTU_Calendar_Hours": 0,
+    "C_DTU": 0.95,
+    "F_DTU": 0.8
+  },
+  {
+    "Month": 3,
+    "DTU_Calendar_Hours": 0,
+    "C_DTU": 0.95,
+    "F_DTU": 0.8
+  },
+  {
+    "Month": 4,
+    "DTU_Calendar_Hours": 0,
+    "C_DTU": 0.95,
+    "F_DTU": 0.8
+  },
+  {
+    "Month": 5,
+    "DTU_Calendar_Hours": 300,
+    "C_DTU": 0.95,
+    "F_DTU": 0.8
+  },
+  {
+    "Month": 6,
+    "DTU_Calendar_Hours": 310,
+    "C_DTU": 0.95,
+    "F_DTU": 0.8
+  },
+  {
+    "Month": 7,
+    "DTU_Calendar_Hours": 320,
+    "C_DTU": 0.95,
+    "F_DTU": 0.8
+  },
+  {
+    "Month": 8,
+    "DTU_Calendar_Hours": 310,
+    "C_DTU": 0.95,
+    "F_DTU": 0.8
+  },
+  {
+    "Month": 9,
+    "DTU_Calendar_Hours": 310,
+    "C_DTU": 0.95,
+    "F_DTU": 0.8
+  },
+  {
+    "Month": 10,
+    "DTU_Calendar_Hours": 300,
+    "C_DTU": 0.95,
+    "F_DTU": 0.8
+  },
+  {
+    "Month": 11,
+    "DTU_Calendar_Hours": 0,
+    "C_DTU": 0.95,
+    "F_DTU": 0.8
+  },
+  {
+    "Month": 12,
+    "DTU_Calendar_Hours": 0,
+    "C_DTU": 0.95,
+    "F_DTU": 0.8
+  }
+  ];
+  var dtuAvailablePriceForecast = [
+  {
+    "After_Month": "4/1/2016",
+    "C_DTU_Low": 0,
+    "C_DTU_Medium": 0,
+    "C_DTU_High": 0,
+    "F_DTU_Low": 0,
+    "F_DTU_Medium": 0,
+    "F_DTU_High": 0
+  },
+  {
+    "After_Month": "5/1/2017",
+    "C_DTU_Low": 1.5,
+    "C_DTU_Medium": 1.25,
+    "C_DTU_High": 0.5,
+    "F_DTU_Low": 0.5,
+    "F_DTU_Medium": 0.4,
+    "F_DTU_High": 0.25
+  },
+  {
+    "After_Month": "5/1/2018",
+    "C_DTU_Low": 1.25,
+    "C_DTU_Medium": 1.15,
+    "C_DTU_High": 0.5,
+    "F_DTU_Low": 0.5,
+    "F_DTU_Medium": 0.4,
+    "F_DTU_High": 0.25
+  },
+  {
+    "After_Month": "5/1/2019",
+    "C_DTU_Low": 1,
+    "C_DTU_Medium": 0.9,
+    "C_DTU_High": 0.5,
+    "F_DTU_Low": 0.5,
+    "F_DTU_Medium": 0.4,
+    "F_DTU_High": 0.25
+  },
+  {
+    "After_Month": "5/1/2020",
+    "C_DTU_Low": 1,
+    "C_DTU_Medium": 0.9,
+    "C_DTU_High": 0.5,
+    "F_DTU_Low": 0.5,
+    "F_DTU_Medium": 0.4,
+    "F_DTU_High": 0.25
+  },
+  {
+    "After_Month": "5/1/2021",
+    "C_DTU_Low": 1,
+    "C_DTU_Medium": 0.9,
+    "C_DTU_High": 0.5,
+    "F_DTU_Low": 0.5,
+    "F_DTU_Medium": 0.4,
+    "F_DTU_High": 0.25
+  },
+  {
+    "After_Month": "5/1/2022",
+    "C_DTU_Low": 1,
+    "C_DTU_Medium": 0.9,
+    "C_DTU_High": 0.5,
+    "F_DTU_Low": 0.5,
+    "F_DTU_Medium": 0.4,
+    "F_DTU_High": 0.25
+  },
+  {
+    "After_Month": "5/1/2023",
+    "C_DTU_Low": 1,
+    "C_DTU_Medium": 0.9,
+    "C_DTU_High": 0.5,
+    "F_DTU_Low": 0.5,
+    "F_DTU_Medium": 0.4,
+    "F_DTU_High": 0.25
+  }
+  ];
+  var dtuUtilizationHoursForecast = [
+  {
+    "Month": 1,
+    "High": 0,
+    "Medium": 0,
+    "Low": 0
+  },
+  {
+    "Month": 2,
+    "High": 0,
+    "Medium": 0,
+    "Low": 0
+  },
+  {
+    "Month": 3,
+    "High": 0,
+    "Medium": 0,
+    "Low": 0
+  },
+  {
+    "Month": 4,
+    "High": 0,
+    "Medium": 0,
+    "Low": 0
+  },
+  {
+    "Month": 5,
+    "High": 10,
+    "Medium": 15,
+    "Low": 30
+  },
+  {
+    "Month": 6,
+    "High": 10,
+    "Medium": 15,
+    "Low": 30
+  },
+  {
+    "Month": 7,
+    "High": 10,
+    "Medium": 15,
+    "Low": 30
+  },
+  {
+    "Month": 8,
+    "High": 10,
+    "Medium": 15,
+    "Low": 30
+  },
+  {
+    "Month": 9,
+    "High": 10,
+    "Medium": 15,
+    "Low": 30
+  },
+  {
+    "Month": 10,
+    "High": 10,
+    "Medium": 15,
+    "Low": 30
+  },
+  {
+    "Month": 11,
+    "High": 0,
+    "Medium": 0,
+    "Low": 0
+  },
+  {
+    "Month": 12,
+    "High": 0,
+    "Medium": 0,
+    "Low": 0
+  }
+  ];
+  var dtuUtilizationPriceForeCast = [
+  {
+    "After_Month": "5/1/2016",
+    "High": 75,
+    "Medium": 60,
+    "Low": 40
+  },
+  {
+    "After_Month": "5/1/2017",
+    "High": 75,
+    "Medium": 60,
+    "Low": 40
+  },
+  {
+    "After_Month": "5/1/2018",
+    "High": 74,
+    "Medium": 60,
+    "Low": 40
+  },
+  {
+    "After_Month": "5/1/2019",
+    "High": 73,
+    "Medium": 60,
+    "Low": 40
+  },
+  {
+    "After_Month": "5/1/2020",
+    "High": 75,
+    "Medium": 60,
+    "Low": 40
+  },
+  {
+    "After_Month": "5/1/2021",
+    "High": 75,
+    "Medium": 60,
+    "Low": 40
+  },
+  {
+    "After_Month": "5/1/2022",
+    "High": 75,
+    "Medium": 60,
+    "Low": 40
+  },
+  {
+    "After_Month": "5/1/2023",
+    "High": 75,
+    "Medium": 60,
+    "Low": 40
+  }
+  ];
+  function getDTUAvailabilityInputs(month) {
+    var found = dtuAvailabilityInputs.find(function (element) {
+      return element.Month == month;
+    });
+    return found;
+  }
+  function getDTUAvailablePriceForecast(date) {
+    var found = dtuAvailablePriceForecast.find(function (element) {
+      return element.After_Month == date;
+    });
+    return found;
+  }
+  function getDTUUtilizationHoursForecast(month) {
+    var found = dtuUtilizationHoursForecast.find(function (element) {
+      return element.Month == month;
+    });
+    return found;
+  }
+  function getDTUUtilizationPriceForeCast(date) {
+    var found = dtuUtilizationPriceForeCast.find(function (element) {
+      return element.After_Month == date;
+    });
+    return found;
+  }
+  function isDTUActive(year) {
+    var date = new Date(year);
+    date = new Date("5/1/" + parseInt(date.getFullYear()))
+    if (date >= new Date($('#contractStart').val()) && date < new Date($('#contractEnd').val()))
+      return true;
+    return false;
+  }
+  function getDTUInfluencingDate(date) {
+    var date = new Date(date);
+    var month = date.getMonth();
+    if (month < 4) {
+      return "5/1/" + (parseInt(date.getFullYear()) - 1);
+    }
+    else {
+      return "5/1/" + date.getFullYear();
+    }
+  }
+  function getDTUFlexibility(dtuFlexibility, date) {
+    return isNaN(dtuFlexibility) ? 0 : isDTUActive(getDTUInfluencingDate(date)) * dtuFlexibility;
+  }
+  function getDTUService(date)
+  {
+    var date = new Date(date);
+    if (date < new Date("5/1/2019"))
+      return "F_DTU";
+    return "C_DTU";
+  }
+  function getDTUUtilizationPriceLevel()
+  {
+    return "High";
+  }
+  function getDTUAvailability(dtuFlexibility, date)
+  {
+    return getDTUFlexibility(dtuFlexibility, date) > 2 ? .20 : .25;
+  }
+  function getDTUUtilization(dtuFlexibility, date)
+  {
+    return getDTUFlexibility(dtuFlexibility, date) > 2 ? .15 : .20;
+  }
+  function isDTUServiceActive(date)
+  {
+    if (isDTUActive(getDTUInfluencingDate(date))) {
+      var date = new Date(date);
+      var dtuAvailability = getDTUAvailabilityInputs(date.getMonth() + 1);
+      return dtuAvailability.DTU_Calendar_Hours > 0 ? true : false ;
+    }
+    return false;
+  }
+  function getDTUCapacityMarketed(dtuFlexibility, date) {
+    return isNaN(dtuFlexibility) ? 0 : isDTUServiceActive(date) * dtuFlexibility;
+  }
+  function getDTUServiceType(date)
+  {
+    return isDTUServiceActive(date) ? getDTUService(date) : "" ;
+  }
+  function getDTUAvailableHours(date)
+  {
+    if (isDTUServiceActive(date))
+    {
+      var date = new Date(date);
+      var dtuAvailability = getDTUAvailabilityInputs(date.getMonth() + 1);
+      return dtuAvailability.DTU_Calendar_Hours * dtuAvailability[getDTUServiceType(date)];
+    }
+    return 0;
+  }
+  function getDTUAvailablePrice(date)
+  {
+    if (isDTUServiceActive(date))
+    {
+      var date = new Date(date);
+	  var dateString = ""
+      if (date < new Date("5/1/" + date.getFullYear()))
+        dateString = "5/1/" + (parseInt(date.getFullYear()) - 1);
+	  else
+        dateString = "5/1/" + date.getFullYear();
+      var dtuAvailablePrice = getDTUAvailablePriceForecast(dateString);
+      return dtuAvailablePrice[getDTUServiceType(date) + "_" + getDTUUtilizationPriceLevel()];
+    }
+    return 0;
+  }
+  function getDTUAvailableMarketRevenue(dtuFlexibility, date) {
+    return (Math.abs(getDTUCapacityMarketed(dtuFlexibility, date)) * getDTUAvailableHours(date) * getDTUAvailablePrice(date)) / 1000;
+  }
+  function getDTUAvailableFacilitationFeePercentage(dtuFlexibility, date) {
+    return isDTUServiceActive(date) ? getDTUAvailability(dtuFlexibility, date) : 0;
+  }
+  function getDTUAvailableFacilitationFeePound(dtuFlexibility, date) {
+    return getDTUAvailableMarketRevenue(dtuFlexibility, date) * getDTUAvailableFacilitationFeePercentage(dtuFlexibility, date) * -1;
+  }
+  function getDTUUtilizationHours(date) {
+    if (isDTUServiceActive(date)) {
+      var date = new Date(date);
+      var dtuUtilizationHours = getDTUUtilizationHoursForecast(date.getMonth() + 1);
+      var dtuAvailability = getDTUAvailabilityInputs(date.getMonth() + 1);
+      return dtuUtilizationHours[getDTUUtilizationPriceLevel()] * dtuAvailability[getDTUServiceType(date)];
+    }
+    return 0;
+  }
+  function getDTUUtilizationPrice(date)
+  {
+    if (isDTUServiceActive(date))
+    {
+      var date = new Date(date);
+      var dateString = ""
+      if (date < new Date("5/1/" + date.getFullYear()))
+        dateString = "5/1/" + (parseInt(date.getFullYear()) - 1);
+      else
+        dateString = "5/1/" + date.getFullYear();
+      var dtuUtilizationPrice = getDTUUtilizationPriceForeCast(dateString);
+      return dtuUtilizationPrice[getDTUUtilizationPriceLevel()];
+	}
+    return 0;
+  }
+  function getDTUUtilizationMarketRevenue(dtuFlexibility, date) {
+    return (Math.abs(getDTUCapacityMarketed(dtuFlexibility, date)) * getDTUUtilizationHours(date) * getDTUUtilizationPrice(date)) / 1000;
+  }
+  function getDTUUtilizationFacilitationFeePercentage(dtuFlexibility, date) {
+    return getDTUAvailableFacilitationFeePercentage(dtuFlexibility, date);
+  }
+  function getDTUUtilizationFacilitationFeePound(dtuFlexibility, date) {
+    return getDTUUtilizationMarketRevenue(dtuFlexibility, date) * getDTUUtilizationFacilitationFeePercentage(dtuFlexibility, date) * -1;
+  }
+  function getDTUFlexibilityRevenue(dtuFlexibility, date) {
+    return getDTUAvailableMarketRevenue(dtuFlexibility, date) + getDTUUtilizationMarketRevenue(dtuFlexibility, date);
+  }
+  function getDTUFacilitationFee(dtuFlexibility, date) {
+    return getDTUAvailableFacilitationFeePound(dtuFlexibility, date) + getDTUUtilizationFacilitationFeePound(dtuFlexibility, date);
+  }
+  function getDTUCustomerGrossFlexRevenue(dtuFlexibility, date) {
+    return getDTUFlexibilityRevenue(dtuFlexibility, date) + getDTUFacilitationFee(dtuFlexibility, date);
+  }
+  //#endregion
+  ////////////////////////////////////////FFR//////////////////////////////////////
+  var ffrWeeklyHours = [
+  {
+    "Month": "24h / 7d",
+    "Hours_per_Week": 168
+  },
+  {
+    "Month": "24h / WD",
+    "Hours_per_Week": 120
+  },
+  {
+    "Month": "24h / WD + Sat",
+    "Hours_per_Week": 144
+  },
+  {
+    "Month": "07:00-16:00 / 7d",
+    "Hours_per_Week": 63
+  },
+  {
+    "Month": "07:00-16:00 / WD",
+    "Hours_per_Week": 45
+  },
+  {
+    "Month": "07:00-16:00 / WD + Sat",
+    "Hours_per_Week": 54
+  },
+  {
+    "Month": "16:00-23:00 / 7d",
+    "Hours_per_Week": 49
+  },
+  {
+    "Month": "16:00-23:00 / WD",
+    "Hours_per_Week": 35
+  },
+  {
+    "Month": "16:00-23:00 / WD + Sat",
+    "Hours_per_Week": 42
+  },
+  {
+    "Month": "07:00-23:00 / 7d",
+    "Hours_per_Week": 112
+  },
+  {
+    "Month": "07:00-23:00 / WD",
+    "Hours_per_Week": 80
+  },
+  {
+    "Month": "07:00-23:00 / WD + Sat",
+    "Hours_per_Week": 96
+  },
+  {
+    "Month": "23:00-07:00 / 7d",
+    "Hours_per_Week": 56
+  },
+  {
+    "Month": "23:00-07:00 / WD",
+    "Hours_per_Week": 40
+  },
+  {
+    "Month": "23:00-07:00 / WD + Sat",
+    "Hours_per_Week": 48
+  }
+  ];
+  var ffrAvailablePriceForecast = [
+  {
+    "After_Month": "3/1/2016",
+    "Sec_Static": 0,
+    "Sec_Dynamic": 0,
+    "Prim_Static": 0,
+    "Prim_Dynamic": 0
+  },
+  {
+    "After_Month": "11/1/2016",
+    "Sec_Static": 0,
+    "Sec_Dynamic": 0,
+    "Prim_Static": 0,
+    "Prim_Dynamic": 0
+  },
+  {
+    "After_Month": "3/1/2017",
+    "Sec_Static": 0,
+    "Sec_Dynamic": 0,
+    "Prim_Static": 0,
+    "Prim_Dynamic": 0
+  },
+  {
+    "After_Month": "11/1/2017",
+    "Sec_Static": 3.6,
+    "Sec_Dynamic": 15,
+    "Prim_Static": 1,
+    "Prim_Dynamic": 5
+  },
+  {
+    "After_Month": "3/1/2018",
+    "Sec_Static": 3.6,
+    "Sec_Dynamic": 15,
+    "Prim_Static": 1,
+    "Prim_Dynamic": 5
+  },
+  {
+    "After_Month": "11/1/2018",
+    "Sec_Static": 3.6,
+    "Sec_Dynamic": 15,
+    "Prim_Static": 1,
+    "Prim_Dynamic": 5
+  },
+  {
+    "After_Month": "3/1/2019",
+    "Sec_Static": 3.6,
+    "Sec_Dynamic": 15,
+    "Prim_Static": 1,
+    "Prim_Dynamic": 5
+  },
+  {
+    "After_Month": "11/1/2019",
+    "Sec_Static": 3.6,
+    "Sec_Dynamic": 15,
+    "Prim_Static": 1,
+    "Prim_Dynamic": 5
+  },
+  {
+    "After_Month": "3/1/2020",
+    "Sec_Static": 3.6,
+    "Sec_Dynamic": 15,
+    "Prim_Static": 1,
+    "Prim_Dynamic": 5
+  },
+  {
+    "After_Month": "11/1/2020",
+    "Sec_Static": 3.6,
+    "Sec_Dynamic": 15,
+    "Prim_Static": 1,
+    "Prim_Dynamic": 5
+  },
+  {
+    "After_Month": "3/1/2021",
+    "Sec_Static": 3.6,
+    "Sec_Dynamic": 15,
+    "Prim_Static": 1,
+    "Prim_Dynamic": 5
+  },
+  {
+    "After_Month": "11/1/2021",
+    "Sec_Static": 3.6,
+    "Sec_Dynamic": 15,
+    "Prim_Static": 1,
+    "Prim_Dynamic": 5
+  },
+  {
+    "After_Month": "3/1/2022",
+    "Sec_Static": 3.6,
+    "Sec_Dynamic": 15,
+    "Prim_Static": 1,
+    "Prim_Dynamic": 5
+  },
+  {
+    "After_Month": "11/1/2022",
+    "Sec_Static": 3.6,
+    "Sec_Dynamic": 15,
+    "Prim_Static": 1,
+    "Prim_Dynamic": 5
+  },
+  {
+    "After_Month": "3/1/2023",
+    "Sec_Static": 3.6,
+    "Sec_Dynamic": 15,
+    "Prim_Static": 1,
+    "Prim_Dynamic": 5
+  },
+  {
+    "After_Month": "11/1/2023",
+    "Sec_Static": 3.6,
+    "Sec_Dynamic": 15,
+    "Prim_Static": 1,
+    "Prim_Dynamic": 5
+  }
+  ];
+  function getFFRWeeklyHours(month) {
+    var found = ffrWeeklyHours.find(function (element) {
+      return element.Month == month;
+    });
+    return found;
+  }
+  function getFFRAvailablePriceForecast(date) {
+    var found = ffrAvailablePriceForecast.find(function (element) {
+      return element.After_Month == date;
+    });
+    return found;
+  }
+  function isFFRActive(date) {
+    var date = new Date(date); //1-Month(4/11)-Year
+    if (date >= new Date($('#contractStart').val()) && date < new Date($('#contractEnd').val()))
+      return true;
+    return false;
+  }
+  function getFFRInfluencingDate(date) {
+    var date = new Date(date);
+    var month = date.getMonth();
+    if (month < 2) {
+      return "11/1/" + (parseInt(date.getFullYear()) - 1);
+    }
+    else if (month < 10) {
+      return "3/1/" + date.getFullYear();
+    }
+    else {
+      return "11/1/" + date.getFullYear();
+    }
+  }
+  function getFFRPrimaryFlexibility(ffrPrimaryFlexibility, date) {
+    return isNaN(ffrPrimaryFlexibility) ? 0 : isFFRActive(getFFRInfluencingDate(date)) * ffrPrimaryFlexibility;
+  }
+  function getFFRSecondaryFlexibility(ffrSecondaryFlexibility, date) {
+    return isNaN(ffrSecondaryFlexibility) ? 0 : isFFRActive(getFFRInfluencingDate(date)) * ffrSecondaryFlexibility;
+  }
+  function getFFRServiceType() {
+    return "Static";
+  }
+  function getFFRServiceWindow() {
+    return "24h / 7d";
+  }
+  function getFFRAvailability( ffrPrimaryFlexibility, ffrSecondaryFlexibility, date) {
+    return getFFRSecondaryFlexibility(ffrSecondaryFlexibility, date) + getFFRPrimaryFlexibility(ffrPrimaryFlexibility, date) > 5 ? .25 : .30;
+  }
+  function getFFRActiveSecondaryFlexibility(ffrSecondaryFlexibility, date) {
+    return getFFRSecondaryFlexibility(ffrSecondaryFlexibility, date);
+  }
+  function getFFRActivePrimaryFlexibility(ffrPrimaryFlexibility, date) {
+    return getFFRPrimaryFlexibility(ffrPrimaryFlexibility, date);
+  }
+  function isFFRServiceActive(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date) {
+    return getFFRActivePrimaryFlexibility(ffrPrimaryFlexibility, date) > 0 || getFFRActiveSecondaryFlexibility(ffrSecondaryFlexibility, date);
+  }
+  function getFFRActiveServiceWindow(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date) {
+    return isFFRServiceActive(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date) ? getFFRServiceWindow() : "";
+  }
+  function getFFRCapacityMarketed(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date)
+  {
+    if (isFFRServiceActive(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date))
+    {
+      var x = getFFRActivePrimaryFlexibility(ffrPrimaryFlexibility, date);
+      var y = getFFRActiveSecondaryFlexibility(ffrSecondaryFlexibility, date);
+      return x > y ? x : y;
+    }
+    return 0;
+  }
+  function getFFRAvailabilityHours(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date)
+  {
+    if (isFFRServiceActive(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date)) {
+      var weeklyHours = getFFRWeeklyHours(getFFRActiveServiceWindow(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date));
+      return 4.33 * weeklyHours.Hours_per_Week;
+    }
+    return 0;
+  }
+  function getFFRAvailabilityPrice(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date) {
+    if (isFFRServiceActive(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date)) {
+      var availablePriceForecast = getFFRAvailablePriceForecast(getFFRInfluencingDate(date));
+      return getFFRActiveSecondaryFlexibility(ffrSecondaryFlexibility, date) * availablePriceForecast["Sec_" + getFFRServiceType()] + getFFRActivePrimaryFlexibility(ffrPrimaryFlexibility, date) * availablePriceForecast["Prim_" + getFFRServiceType()];
+    }
+    return 0;
+  }
+  function getFFRAvailableMarketRevenue(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date) {
+    return (getFFRAvailabilityHours(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date) * getFFRAvailabilityPrice(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date)) / 1000;
+  }
+  function getFFRAvailableFacilitationFeePercentage(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date) {
+    return isFFRServiceActive(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date) ? getFFRAvailability(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date) : 0;
+  }
+  function getFFRAvailableFacilitationFeePound(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date) {
+    return getFFRAvailableMarketRevenue(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date) * getFFRAvailableFacilitationFeePercentage(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date) * -1;
+  }
+  function getFFRCustomerGrossRevenue(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date) {
+    return getFFRAvailableMarketRevenue(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date) + getFFRAvailableFacilitationFeePound(ffrPrimaryFlexibility, ffrSecondaryFlexibility, date);
+  }
+</Script>
+
+
